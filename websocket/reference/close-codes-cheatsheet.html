@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — WebSocket close code 치트시트</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<h1><span class="lesson-number">Reference · WebSocket 프로토콜</span>
+close code 치트시트</h1>
+
+<h2>정의된 코드 (RFC 6455 §7.4.1)</h2>
+<table>
+<tr><th>코드</th><th>의미</th><th>와이어</th><th>브라우저 close()</th></tr>
+<tr><td><code>1000</code></td><td>정상 종료</td><td>가능</td><td><strong>가능</strong></td></tr>
+<tr><td><code>1001</code></td><td>떠남 — 서버 셧다운, 페이지 이탈</td><td>가능</td><td>불가</td></tr>
+<tr><td><code>1002</code></td><td>프로토콜 오류</td><td>가능</td><td>불가</td></tr>
+<tr><td><code>1003</code></td><td>수용 불가한 데이터 타입 (텍스트만 받는데 바이너리 등)</td><td>가능</td><td>불가</td></tr>
+<tr><td><code>1004</code></td><td>예약 — 의미 미정의</td><td>불가</td><td>불가</td></tr>
+<tr><td><code>1005</code></td><td>합성: Close 프레임에 코드가 없었음</td><td><strong>금지</strong></td><td>불가</td></tr>
+<tr><td><code>1006</code></td><td>합성: Close 프레임 없이 비정상 끊김 (모든 연결 실패 포함)</td><td><strong>금지</strong></td><td>불가</td></tr>
+<tr><td><code>1007</code></td><td>페이로드가 메시지 타입과 불일치 (예: Text인데 깨진 UTF-8)</td><td>가능</td><td>불가</td></tr>
+<tr><td><code>1008</code></td><td>정책 위반 (범용 — 이유를 숨길 때도)</td><td>가능</td><td>불가</td></tr>
+<tr><td><code>1009</code></td><td>메시지가 너무 큼</td><td>가능</td><td>불가</td></tr>
+<tr><td><code>1010</code></td><td>확장 협상 실패 (클라이언트 전용 — 서버는 핸드셰이크를 거부하면 됨)</td><td>가능</td><td>불가</td></tr>
+<tr><td><code>1011</code></td><td>서버 내부 오류 (서버판 500)</td><td>가능</td><td>불가</td></tr>
+<tr><td><code>1015</code></td><td>합성: TLS 핸드셰이크 실패</td><td><strong>금지</strong></td><td>불가</td></tr>
+</table>
+
+<h2>범위 관할 (§7.4.2)</h2>
+<table>
+<tr><td><code>0–999</code></td><td>사용하지 않음</td></tr>
+<tr><td><code>1000–2999</code></td><td>프로토콜·확장 스펙 전용</td></tr>
+<tr><td><code>3000–3999</code></td><td>라이브러리·프레임워크 (IANA 등록제)</td></tr>
+<tr><td><code>4000–4999</code></td><td>앱 자유 사용 — 자체 종료 사유는 여기 (예: 4001 세션 만료)</td></tr>
+</table>
+
+<h2>빠른 사실</h2>
+<table>
+<tr><td>Close 프레임 페이로드</td><td>코드 2바이트(빅엔디안) + UTF-8 reason ≤123바이트 (컨트롤 프레임 한도 125 − 2)</td></tr>
+<tr><td>브라우저 <code>close(code)</code> 허용값</td><td>1000 또는 3000–4999만. 그 외 <code>InvalidAccessError</code> (WHATWG). 서버 측 라이브러리는 이 제약 없음 — 와이어 규칙만 지키면 프로토콜 코드(1011 등) 전송 가능</td></tr>
+<tr><td><code>wasClean</code></td><td>Close 핸드셰이크 완료 후 TCP가 닫혔는가 (§7.1.4)</td></tr>
+<tr><td>1006의 의미</td><td>"서버가 보낸 코드"가 아니라 "아무 Close 프레임도 못 받았다"는 로컬 보고</td></tr>
+<tr><td>재연결 권고</td><td>랜덤 초기 지연(0~5초) + 지수 백오프 — 스펙 SHOULD (§7.2.3)</td></tr>
+<tr><td>TCP 종료 순서</td><td>서버가 먼저 닫는 것이 SHOULD (TIME_WAIT를 서버가 부담, §7.1.1)</td></tr>
+</table>
+
+<footer>
+<p>출처 레슨: <a href="../lessons/0003-closing-handshake-close-codes.html">Lesson 0003</a> · <a href="frame-cheatsheet.html">프레임 치트시트</a> · <a href="glossary.html">용어집</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<meta charset="utf-8">
+<title>레슨 1 — 명제, 그리고 예시는 왜 증명이 아닌가</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="../assets/quiz.js" defer></script>
+
+<h1><span class="lesson-number">6.042J · Lesson 0001 · Lecture 1 전반부</span>명제, 그리고 예시는 왜 증명이 아닌가</h1>
+
+<p class="lede">이 코스 전체는 단 하나의 활동 위에 서 있다: 명제(proposition)를 세우고, 그것을 증명(proof)하는 것. 오늘은 그 첫 번째 단어를 정확히 잡는다.</p>
+
+<div class="note">
+<strong>미션 연결.</strong> 개발자에게 가장 익숙한 검증은 테스트다. 그런데 테스트는 <em>예시 확인</em>이다 — 백만 개를 통과해도 "버그 없음"의 보장이 아니다. 수학의 증명은 그 보장을 주는 유일한 도구이고, 알고리즘의 정확성·복잡도 분석이 전부 이 위에 서 있다. 오늘 배우는 건 그 출발점: 예시와 증명의 차이.
+</div>
+
+<h2>1. 명제(proposition)란</h2>
+
+<p>교재 챕터 1의 첫 정의는 한 문장이다:</p>
+
+<blockquote>
+A proposition is a statement that is either true or false.
+<cite>— <em>Mathematics for Computer Science</em>, Chapter 1 · 번역: 명제란 참이거나 거짓인 서술문이다.</cite>
+</blockquote>
+
+<p>중요한 건 <strong>"참이거나 거짓"이 확정되어 있으면 된다</strong>는 것. 우리가 어느 쪽인지 알 필요는 없다.</p>
+
+<table>
+<tr><th>문장</th><th>명제인가?</th><th>이유</th></tr>
+<tr><td>2 + 3 = 5</td><td>명제 (참)</td><td>진위 확정</td></tr>
+<tr><td>1 + 1 = 3</td><td>명제 (거짓)</td><td>거짓이어도 진위가 확정이면 명제다</td></tr>
+<tr><td>x + 1 = 3</td><td>명제 아님</td><td>x가 뭐냐에 따라 달라짐 — 진위 미확정</td></tr>
+<tr><td>"수학은 아름답다"</td><td>명제 아님</td><td>주관적 — 참/거짓 판정 불가</td></tr>
+</table>
+
+<h2>2. 예시는 증명이 아니다</h2>
+
+<p>Leighton 교수가 Lecture 1에서 드는 유명한 예. 다음 식을 보자:</p>
+
+<pre><code>p(n) = n² + n + 41</code></pre>
+
+<p>n = 0이면 41(소수), n = 1이면 43(소수), n = 2면 47(소수)… 이렇게 <strong>n = 39까지 전부 소수(prime)</strong>다. 40개 연속 성공. "모든 자연수 n에 대해 p(n)은 소수다"라는 명제, 이쯤 되면 참이라고 믿고 싶어진다.</p>
+
+<p>그런데 n = 40에서: 40² + 40 + 41 = 40(40+1) + 41 = 41·41. 소수가 아니다. <strong>명제는 거짓</strong>이었다. 40개의 예시는 아무것도 증명하지 못했고, 반례(counterexample) 하나가 모든 걸 끝냈다.</p>
+
+<p>더 극단적인 사례. 1769년 Euler는 이렇게 추측했다: "a⁴ + b⁴ + c⁴ = d⁴을 만족하는 양의 정수는 없다." <strong>218년간</strong> 반례가 발견되지 않았지만, 1987년에 나왔다:</p>
+
+<pre><code>95800⁴ + 217519⁴ + 414560⁴ = 422481⁴</code></pre>
+
+<p>218년 동안 아무도 반례를 못 찾은 것도 증명이 아니었다. 테스트를 아무리 오래 돌려도 "버그 없음"이 안 되는 것과 정확히 같은 구조다.</p>
+
+<h2>3. 진위를 몰라도 명제다</h2>
+
+<p>Goldbach's conjecture(1742): "2보다 큰 모든 짝수는 두 소수의 합이다." 4 = 2+2, 6 = 3+3, 8 = 3+5, … 컴퓨터로 4×10¹⁸까지 확인됐지만, 280년 넘게 <strong>아무도 증명도 반증도 못 했다</strong>.</p>
+
+<p>그래도 이것은 명제다. 참이거나 거짓이거나 둘 중 하나임은 확정되어 있고, 단지 인류가 어느 쪽인지 모를 뿐이다. 아직 증명되지 않은 명제를 추측(conjecture)이라 부른다.</p>
+
+<h2>4. 그럼 증명이란</h2>
+
+<p>이 코스에서 쓸 작업 정의:</p>
+
+<div class="note">
+<strong>증명(proof)</strong>이란, 증명 없이 받아들이기로 한 출발점인 공리(axiom)에서 시작해, 논리 규칙만으로 명제가 참임을 확립하는 논증이다. 예시 확인이 "n개의 입력에 대해 맞았다"라면, 증명은 "<em>모든</em> 입력에 대해 맞을 수밖에 없다"이다.
+</div>
+
+<p>증명을 실제로 어떻게 쓰는지 — implication(p이면 q), 대우, 모순 증명 — 는 다음 레슨에서 손으로 직접 해본다.</p>
+
+<h2>확인 퀴즈</h2>
+<p>기억에서 꺼내보자. 틀려도 좋다 — 꺼내려는 시도 자체가 학습이다.</p>
+<div class="quiz" id="quiz1"></div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  renderQuiz('quiz1', [
+    {
+      stem: '다음 중 명제(proposition)인 것은?',
+      choices: ['1 + 1 = 3', 'x + 1 = 3', '"수학은 아름답다"', '"이리 와 봐"'],
+      answer: 0,
+      why: '명제의 조건은 진위가 확정되어 있는 것이다. 1+1=3은 거짓이지만 거짓임이 확정이므로 명제다. 나머지는 진위를 판정할 수 없다.'
+    },
+    {
+      stem: 'n² + n + 41이 n = 0…39에서 모두 소수임을 확인했다. "모든 자연수 n에서 소수다"라는 명제에 대해 말할 수 있는 것은?',
+      choices: ['아직 아무것도 증명되지 않았다', '40개면 사실상 증명된 것이다', '확률적으로 참이라고 봐도 된다', '반례가 없으므로 참인 명제다'],
+      answer: 0,
+      why: '예시는 개수와 무관하게 증명이 아니다. 실제로 n=40에서 41·41이 되어 거짓이었다. 테스트 통과가 버그 없음의 증명이 아닌 것과 같다.'
+    },
+    {
+      stem: 'Goldbach 추측은 280년째 참인지 거짓인지 아무도 모른다. 이것은 명제인가?',
+      choices: ['명제다, 진위가 확정되어 있으므로', '명제가 아니다, 진위를 모르므로', '증명되어야 그때부터 명제가 된다', '거짓이다, 증명이 없기 때문이다'],
+      answer: 0,
+      why: '명제의 기준은 진위가 "존재"하느냐이지 우리가 "아느냐"가 아니다. 참/거짓 둘 중 하나임은 확정되어 있다.'
+    }
+  ]);
+});
+</script>
+
+<h2>Primary source</h2>
+<ul>
+<li><strong>비디오</strong>: <a href="https://www.youtube.com/watch?v=L3LMbpZIKhQ">Lecture 1: Introduction and Proofs — Tom Leighton</a> 의 <strong>앞 20분</strong>이 오늘 범위. 설정(⚙) → 자막 → 자동 번역 → 한국어를 켜면 부담이 크게 준다.</li>
+<li><strong>교재</strong>: <a href="../../mit/6.042j-fall-2010/static_resources/7853d585044ef21bce5f48ce5fc89d28_MIT6_042JF10_chap01.pdf">Chapter 1: Propositions (PDF, 로컬)</a> — §1.1까지만. 위 정의 문장을 원문에서 직접 찾아보는 것이 오늘의 원문 연습.</li>
+<li>보조: <a href="../../mit/6.042j-fall-2010/static_resources/35948f025420c52f2c6c18d2da9e266b_L3LMbpZIKhQ.pdf">Lecture 1 판서 노트 (PDF, 로컬)</a></li>
+</ul>
+
+<nav class="lesson-nav">
+<span></span>
+<span>다음: 명제 논리와 증명의 첫 패턴 (예정)</span>
+</nav>
+
+<footer>
+용어는 <a href="../reference/glossary.html">용어집</a>에 정리되어 있다. 읽다가 막히는 문장, 이해 안 되는 개념은 무엇이든 에이전트(Claude)에게 물어볼 것 — 질문에서 나온 내용은 레슨에 다시 반영된다.
+<br>출처: MIT OCW 6.042J Fall 2010, Lehman·Leighton·Meyer, <em>Mathematics for Computer Science</em> (CC BY-NC-SA).
+</footer>

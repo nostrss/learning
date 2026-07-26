@@ -155,6 +155,16 @@ nav.lesson-nav {
   border-radius: 3px;
 }
 .widget output { display: block; margin-top: 0.8rem; font-size: 0.95rem; }
+/* 바이트 색상 (프레임 다이어그램/인코더에서 재사용) */
+.hexA { color: #b3261e; } /* 헤더 byte 0: FIN+opcode */
+.hexB { color: #1a5fb4; } /* 헤더 byte 1: MASK+length */
+.hexC { color: #8f5902; } /* 마스킹 키 */
+.hexD { color: var(--muted); } /* 페이로드 */
+@media (prefers-color-scheme: dark) {
+  .hexA { color: #f28b82; }
+  .hexB { color: #8ab4f8; }
+  .hexC { color: #fdd663; }
+}
 @media print {
   body { max-width: none; padding: 0; }
   .quiz, .widget, nav.lesson-nav { display: none; }

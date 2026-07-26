@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 2 — 프레임 구조: opcode와 마스킹</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<h1><span class="lesson-number">Lesson 0002 · WebSocket 프로토콜</span>
+프레임 구조 — opcode와 마스킹</h1>
+
+<p class="lede"><a href="0001-websocket-vs-http-handshake.html">레슨 1</a>에서 101 이후 "HTTP가 아닌 것"이 흐른다고 했다. 그것의 정체: <code>ws.send("Hello")</code> 한 줄이 와이어에 놓는 실제 바이트를 본다.</p>
+
+<h2>핵심 답부터</h2>
+<p>101 이후 모든 데이터는 <strong>프레임(frame)</strong>이라는 단위로 흐른다. 프레임은 <strong>최소 2바이트짜리 헤더 + 페이로드</strong>로 구성된 바이너리 구조다. HTTP처럼 텍스트 헤더(<code>Content-Type: ...</code>)를 매번 보내는 게 아니라, 비트 단위로 꽉 채운 작은 헤더만 붙는다 — 메시지당 오버헤드가 수백 바이트에서 <strong>2~14바이트</strong>로 줄어드는 것이 WebSocket 효율의 실체다.</p>
+
+<h2>프레임 헤더 — RFC의 그림 그대로 읽기</h2>
+<p>아래는 <a href="https://datatracker.ietf.org/doc/html/rfc6455#section-5.2">RFC 6455 §5.2</a>에 실린 원문 다이어그램이다. RFC를 읽는 연습을 위해 원문 그대로 가져왔다 (한 줄이 32비트 = 4바이트):</p>
+
+<pre><code> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-------+-+-------------+-------------------------------+
+|F|R|R|R| opcode|M| Payload len |    Extended payload length    |
+|I|S|S|S|  (4)  |A|     (7)     |             (16/64)           |
+|N|V|V|V|       |S|             |   (if payload len==126/127)   |
+| |1|2|3|       |K|             |                               |
++-+-+-+-+-------+-+-------------+ - - - - - - - - - - - - - - - +
+|     Extended payload length continued, if payload len == 127  |
++ - - - - - - - - - - - - - - - +-------------------------------+
+|                               |Masking-key, if MASK set to 1  |
++-------------------------------+-------------------------------+
+| Masking-key (continued)       |          Payload Data         |
++-------------------------------- - - - - - - - - - - - - - - - +</code></pre>
+
+<p>첫 2바이트에 모든 제어 정보가 압축돼 있다:</p>
+
+<table>
+<tr><th>필드</th><th>크기</th><th>의미</th></tr>
+<tr><td><span class="hexA"><strong>FIN</strong></span></td><td>1비트</td><td>1이면 이 프레임이 메시지의 마지막 조각. 0이면 뒤에 조각이 더 온다 (단편화)</td></tr>
+<tr><td>RSV1–3</td><td>각 1비트</td><td>확장 협상이 없으면 반드시 0 (permessage-deflate가 RSV1을 쓴다 — 후속 레슨)</td></tr>
+<tr><td><span class="hexA"><strong>opcode</strong></span></td><td>4비트</td><td>페이로드의 해석 방법 (아래 표)</td></tr>
+<tr><td><span class="hexB"><strong>MASK</strong></span></td><td>1비트</td><td>페이로드가 마스킹됐는가. 클라→서버는 항상 1</td></tr>
+<tr><td><span class="hexB"><strong>Payload len</strong></span></td><td>7비트</td><td>0–125면 그 값이 실제 길이. <strong>126</strong>이면 다음 2바이트가 길이(16비트), <strong>127</strong>이면 다음 8바이트가 길이(64비트)</td></tr>
+<tr><td><span class="hexC"><strong>Masking-key</strong></span></td><td>0 또는 4바이트</td><td>MASK=1일 때만 존재. 프레임마다 새로 뽑는 무작위 값</td></tr>
+</table>
+
+<p>7비트로는 최대 125까지만 표현되므로, 126과 127을 "다음 N바이트를 길이로 읽어라"라는 <em>탈출 코드</em>로 예약한 것이다. 짧은 메시지는 2바이트 헤더로 끝내고, 긴 메시지만 비용을 내는 가변 길이 설계다.</p>
+
+<h3>예제로 읽기 — RFC가 직접 주는 "Hello" (§5.7)</h3>
+<p>다이어그램만으로는 어려우니 실물로 풀어보자. <a href="https://datatracker.ietf.org/doc/html/rfc6455#section-5.7">RFC 6455 §5.7</a>에 실린 예제 그대로, 클라이언트가 <code>ws.send("Hello")</code>를 실행하면 와이어에 이 11바이트가 놓인다:</p>
+
+<pre><code><span class="hexA">81</span> <span class="hexB">85</span> <span class="hexC">37 fa 21 3d</span> <span class="hexD">7f 9f 4d 51 58</span></code></pre>
+
+<p>앞에서부터 한 바이트씩 읽으면:</p>
+
+<table>
+<tr><th>바이트</th><th>2진수</th><th>해석</th></tr>
+<tr><td><span class="hexA"><code>81</code></span></td><td><code>1 000 0001</code></td><td><strong>FIN=1</strong> (마지막 조각) · RSV <code>000</code> · <strong>opcode=0x1</strong> (Text)</td></tr>
+<tr><td><span class="hexB"><code>85</code></span></td><td><code>1 0000101</code></td><td><strong>MASK=1</strong> (마스킹됨) · <strong>길이=5</strong> (125 이하이므로 이 값이 실제 길이 — 확장 길이 바이트 없음)</td></tr>
+<tr><td><span class="hexC"><code>37 fa 21 3d</code></span></td><td>—</td><td>마스킹 키 4바이트 (이 프레임을 위해 무작위로 뽑힌 값)</td></tr>
+<tr><td><span class="hexD"><code>7f 9f 4d 51 58</code></span></td><td>—</td><td>마스킹된 페이로드 5바이트 (아래에서 복원)</td></tr>
+</table>
+
+<p>서버는 받은 페이로드를 <code>페이로드[i] XOR 키[i mod 4]</code>로 복원한다. 공식을 두 부분으로 나눠 보자.</p>
+
+<p><strong>XOR(⊕)이 하는 일.</strong> 두 바이트를 겹쳐 놓고 비트 자리마다 비교해서, <em>다르면 1, 같으면 0</em>을 쓰는 연산이다. 첫 번째 바이트를 실제로 계산해보면:</p>
+
+<pre><code>  마스킹된 값  <span class="hexD">7f</span> = 0111 1111
+⊕ 키[0]       <span class="hexC">37</span> = 0011 0111
+─────────────────────────────
+  복원된 값       48 = 0100 1000  = 'H'   <span class="dim">← 자리마다: 다르면 1, 같으면 0</span></code></pre>
+
+<p>XOR의 결정적 성질은 <strong>같은 값으로 두 번 XOR하면 원래대로 돌아온다</strong>는 것이다 (<code>A ⊕ 키 ⊕ 키 = A</code>). 클라이언트가 <code>48 ⊕ 37 = 7f</code>로 <em>마스킹</em>한 것을, 서버가 똑같이 <code>7f ⊕ 37 = 48</code>로 <em>복원</em>한다 — 마스킹과 복원이 완전히 동일한 연산 하나인 이유이고, §5.3이 "같은 알고리즘이 양방향에 적용된다"고 쓴 이유다.</p>
+
+<p><strong><code>i mod 4</code>가 하는 일.</strong> 키는 4바이트뿐인데 페이로드는 얼마든지 길 수 있다. 그래서 페이로드의 i번째 바이트에는 키의 <code>i mod 4</code>번째(= i를 4로 나눈 나머지) 바이트를 짝지어, 키를 <em>0,1,2,3,0,1,2,3,…</em> 순으로 돌려쓴다. "Hello"는 5바이트라서 마지막 바이트(i=4)에서 키[0]이 재사용되는 것을 아래 표에서 볼 수 있다:</p>
+
+<table>
+<tr><th>i</th><th>마스킹된 값</th><th>XOR</th><th>키[i mod 4]</th><th>=</th><th>복원</th><th>문자</th></tr>
+<tr><td>0</td><td><code>7f</code></td><td>⊕</td><td><code>37</code> (키[0])</td><td>=</td><td><code>48</code></td><td>H</td></tr>
+<tr><td>1</td><td><code>9f</code></td><td>⊕</td><td><code>fa</code> (키[1])</td><td>=</td><td><code>65</code></td><td>e</td></tr>
+<tr><td>2</td><td><code>4d</code></td><td>⊕</td><td><code>21</code> (키[2])</td><td>=</td><td><code>6c</code></td><td>l</td></tr>
+<tr><td>3</td><td><code>51</code></td><td>⊕</td><td><code>3d</code> (키[3])</td><td>=</td><td><code>6c</code></td><td>l</td></tr>
+<tr><td>4</td><td><code>58</code></td><td>⊕</td><td><code>37</code> (키[0] 재사용)</td><td>=</td><td><code>6f</code></td><td>o</td></tr>
+</table>
+
+<p>같은 "Hello"를 <strong>서버가 클라이언트로</strong> 보낼 때는 마스킹이 금지되므로 훨씬 단순하다 — MASK 비트가 0이 되고(<code>85</code> → <code>05</code>), 키 4바이트가 사라지며, 페이로드가 날것 그대로 실린다:</p>
+
+<pre><code><span class="hexA">81</span> <span class="hexB">05</span> <span class="hexD">48 65 6c 6c 6f</span>   <span class="dim">← 7바이트. "Hello"가 hex로 그대로 보인다</span></code></pre>
+
+<div class="note">
+<strong>48이 왜 'H'인가?</strong> Text 프레임의 페이로드는 UTF-8이고, UTF-8은 ASCII의 상위 호환이라 0~127 범위(영문·숫자)는 ASCII 표 그대로 1바이트다 (72 = 0x48 = 'H'). 범위를 벗어나면 달라진다: "안녕"은 글자당 3바이트씩 총 6바이트 (<code>ec 95 88 eb 85 95</code>). Payload len이 세는 것은 <strong>글자 수가 아니라 바이트 수</strong>다.
+</div>
+
+<p>이 두 프레임을 나란히 놓고 읽을 수 있다면 다이어그램은 정복한 것이다. 아래 인코더 위젯에 "Hello"를 넣으면 같은 구조가 (매번 다른 키로) 만들어지는 것을 확인할 수 있다 — "안녕"을 넣으면 길이가 6으로 찍히는 것도.</p>
+
+<h2>opcode — 프레임의 종류</h2>
+<table>
+<tr><th>opcode</th><th>이름</th><th>분류</th><th>비고</th></tr>
+<tr><td><code>0x0</code></td><td>Continuation</td><td>데이터</td><td>단편화된 메시지의 이어지는 조각</td></tr>
+<tr><td><code>0x1</code></td><td>Text</td><td>데이터</td><td>페이로드는 반드시 유효한 UTF-8. <code>ws.send("문자열")</code>이 이것</td></tr>
+<tr><td><code>0x2</code></td><td>Binary</td><td>데이터</td><td><code>ws.send(ArrayBuffer/Blob)</code>이 이것</td></tr>
+<tr><td><code>0x8</code></td><td>Close</td><td>컨트롤</td><td>종료 핸드셰이크 — 레슨 3에서 상세히</td></tr>
+<tr><td><code>0x9</code> / <code>0xA</code></td><td>Ping / Pong</td><td>컨트롤</td><td>keepalive — 레슨 4에서 상세히</td></tr>
+</table>
+
+<p>컨트롤 프레임(0x8~0xF)에는 두 가지 강한 제약이 있다: <strong>페이로드 125바이트 이하, 단편화 금지</strong> (<a href="https://datatracker.ietf.org/doc/html/rfc6455#section-5.5">§5.5</a>). 덕분에 컨트롤 프레임은 단편화된 데이터 메시지의 조각들 <em>사이에</em> 끼어들 수 있다 — 긴 파일을 보내는 중에도 ping이 지나갈 수 있는 이유다.</p>
+
+<div class="note">
+<strong>브라우저가 숨기는 것.</strong> 단편화(FIN=0 → continuation → FIN=1)는 브라우저 API에서 보이지 않는다. WHATWG 표준에 따라 브라우저는 조각을 모두 조립한 뒤 <strong>완성된 메시지 단위로만</strong> <code>onmessage</code>를 발생시킨다. DevTools Network 탭의 Messages도 프레임이 아니라 메시지를 보여준다 — 프레임 층을 실제로 보려면 Wireshark가 필요하다.
+</div>
+
+<h2>마스킹 — 왜 브라우저→서버 방향만?</h2>
+<p>규칙은 비대칭이다 (<a href="https://datatracker.ietf.org/doc/html/rfc6455#section-5.3">§5.3</a>):</p>
+<ul>
+<li>클라이언트 → 서버: <strong>반드시 마스킹</strong> (TLS를 써도!). 알고리즘: 프레임마다 무작위 4바이트 키를 뽑아 <code>페이로드[i] XOR 키[i mod 4]</code></li>
+<li>서버 → 클라이언트: <strong>마스킹 금지.</strong> 마스킹된 프레임을 받으면 클라이언트는 연결을 끊어야 한다</li>
+</ul>
+<p>XOR 한 번이 암호화일 리 없다 — 키가 프레임 안에 같이 실려 있으니 누구든 풀 수 있다. 목적은 기밀성이 아니라 <strong>중간 장비 보호</strong>다 (<a href="https://datatracker.ietf.org/doc/html/rfc6455#section-10.3">§10.3</a>): 악성 스크립트가 페이로드에 가짜 HTTP 요청처럼 <em>보이는</em> 바이트를 실어 보내면, 프로토콜을 모르는 낡은 프록시가 그걸 진짜 HTTP로 오해하고 응답을 캐시할 수 있다(캐시 오염 공격). 무작위 마스킹은 공격자가 와이어에 놓일 바이트를 <em>선택할 수 없게</em> 만들어 이를 차단한다.</p>
+<p><a href="0001-websocket-vs-http-handshake.html">레슨 1</a>의 Sec-WebSocket-Key와 같은 주제의식이다: WebSocket 스펙은 "프로토콜을 모르는 중간 장비"를 일관되게 경계한다. 핸드셰이크에서는 우발적 수락을 막고, 프레임에서는 캐시 오염을 막는다.</p>
+
+<div class="widget">
+<h3 style="margin-top:0">직접 브라우저가 되어보기 — 프레임 인코더</h3>
+<p style="font-size:0.9rem">메시지를 입력하면 브라우저가 서버로 보낼 실제 프레임 바이트를 만든다. 같은 메시지라도 "다시 인코딩"할 때마다 <span class="hexC">마스킹 키</span>가 새로 뽑혀 <span class="hexD">페이로드</span> 바이트가 달라지는 것을 확인하라 — 이것이 "공격자가 와이어의 바이트를 선택할 수 없다"의 의미다.</p>
+<input type="text" id="msg" value="Hello" aria-label="보낼 메시지">
+<button id="enc">인코딩</button>
+<button id="reenc">다시 인코딩 (새 마스킹 키)</button>
+<output id="frameout"></output>
+</div>
+
+<h2>확인 퀴즈</h2>
+<div class="quiz" id="quiz1"></div>
+
+<h2>다음 단계</h2>
+<div class="note">
+<strong>1차 자료 읽기.</strong> 오늘의 원문: <a href="https://datatracker.ietf.org/doc/html/rfc6455#section-5.2">RFC 6455 §5.2 (Base Framing Protocol)</a> — 위에서 다이어그램을 이미 읽었으니 원문이 그대로 읽힐 것이다. 성능 관점의 해설은 <a href="https://hpbn.co/websocket/">HPBN Ch.17</a>의 "Message Overhead" 절 추천.
+</div>
+
+<footer>
+<p>참고 문서: <a href="../reference/frame-cheatsheet.html">프레임 치트시트</a> · <a href="../reference/handshake-cheatsheet.html">핸드셰이크 치트시트</a> · <a href="../reference/glossary.html">용어집</a></p>
+<p>궁금한 점이 있으면 언제든 에이전트(선생님)에게 후속 질문을 하세요 — "왜 서버→클라이언트는 마스킹을 금지까지 하는지" 같은 질문 환영.</p>
+<nav class="lesson-nav"><a href="0001-websocket-vs-http-handshake.html">← 레슨 1: 열림 핸드셰이크</a><span>다음 레슨 (예정): 종료 핸드셰이크와 close code</span></nav>
+</footer>
+
+<script src="../assets/quiz.js"></script>
+<script>
+renderQuiz('quiz1', [
+  {
+    stem: '클라이언트가 서버로 보내는 프레임의 마스킹 규칙은?',
+    choices: ['항상 마스킹해야 한다', 'TLS면 생략해도 된다', '요청받을 때만 한다', '바이너리만 마스킹하면 된다'],
+    answer: 0,
+    why: 'MUST mask — TLS 여부와 무관하게 항상이다. 반대로 서버→클라이언트는 마스킹이 금지된다 (§5.3).'
+  },
+  {
+    stem: 'Payload len 필드(7비트) 값이 126일 때의 의미는?',
+    choices: [
+      '다음 2바이트가 실제 길이다',
+      '다음 8바이트가 실제 길이다',
+      '페이로드가 정확히 126바이트다',
+      '확장 데이터가 이어진다는 뜻이다'
+    ],
+    answer: 0,
+    why: '126은 "다음 16비트를 길이로 읽어라"는 탈출 코드다. 127이면 다음 64비트. 0–125만 값 그대로다 (§5.2).'
+  },
+  {
+    stem: 'ws.send("안녕") 실행 시 프레임의 opcode는?',
+    choices: ['0x1', '0x2', '0x8', '0x9'],
+    answer: 0,
+    why: '문자열은 Text 프레임(0x1)이고 페이로드는 반드시 유효한 UTF-8이어야 한다. ArrayBuffer였다면 0x2.'
+  },
+  {
+    stem: '컨트롤 프레임(Close·Ping·Pong)에 대한 스펙의 제약은?',
+    choices: [
+      '페이로드 125바이트 이하, 단편화 금지다',
+      '페이로드 크기 제한 없음, 단편화 가능하다',
+      '텍스트 데이터만 페이로드에 실을 수 있다',
+      '데이터 프레임보다 항상 먼저 전송돼야 한다'
+    ],
+    answer: 0,
+    why: '≤125바이트 + 단편화 금지 (§5.5). 이 제약 덕에 컨트롤 프레임은 단편화된 메시지 조각 사이에 끼어들 수 있다.'
+  }
+]);
+
+function toHex(bytes, cls) {
+  return [...bytes].map(b => `<span class="${cls}">${b.toString(16).padStart(2, '0')}</span>`).join(' ');
+}
+function encodeFrame() {
+  const payload = new TextEncoder().encode(document.getElementById('msg').value);
+  const mask = crypto.getRandomValues(new Uint8Array(4));
+  const masked = payload.map((b, i) => b ^ mask[i % 4]);
+
+  const b0 = 0x80 | 0x1; // FIN=1, opcode=0x1 (Text)
+  let lenBytes;
+  if (payload.length < 126) {
+    lenBytes = [0x80 | payload.length]; // MASK=1
+  } else {
+    lenBytes = [0x80 | 126, payload.length >> 8, payload.length & 0xff];
+  }
+  const total = 1 + lenBytes.length + 4 + payload.length;
+  document.getElementById('frameout').innerHTML =
+    `<code>${toHex([b0], 'hexA')} ${toHex(lenBytes, 'hexB')} ${toHex(mask, 'hexC')} ${toHex(masked, 'hexD')}</code>
+     <span style="font-size:0.85rem; display:block; margin-top:0.5rem">
+     <span class="hexA">■ 81 = FIN 1 + opcode 0x1(Text)</span> ·
+     <span class="hexB">■ MASK 1 + 길이 ${payload.length}</span> ·
+     <span class="hexC">■ 마스킹 키 (매번 무작위)</span> ·
+     <span class="hexD">■ XOR된 페이로드</span><br>
+     총 ${total}바이트 — 같은 내용을 HTTP 요청으로 보냈다면 헤더만 수백 바이트다.</span>`;
+}
+document.getElementById('enc').onclick = encodeFrame;
+document.getElementById('reenc').onclick = encodeFrame;
+</script>
+</body>
+</html>

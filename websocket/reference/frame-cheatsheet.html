@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — WebSocket 프레임 치트시트</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<h1><span class="lesson-number">Reference · WebSocket 프로토콜</span>
+프레임 치트시트</h1>
+
+<h2>헤더 레이아웃 (RFC 6455 §5.2)</h2>
+<pre><code>바이트 0: <span class="hexA">FIN(1) RSV1-3(3) opcode(4)</span>
+바이트 1: <span class="hexB">MASK(1) Payload len(7)</span>
+이후:     [확장 길이 0/2/8B] <span class="hexC">[마스킹 키 0/4B]</span> <span class="hexD">[페이로드]</span>
+
+예: 클라이언트가 "Hello" 전송 → <span class="hexA">81</span> <span class="hexB">85</span> <span class="hexC">xx xx xx xx</span> <span class="hexD">?? ?? ?? ?? ??</span> (11B)
+    서버가 "Hello" 전송     → <span class="hexA">81</span> <span class="hexB">05</span> 48 65 6c 6c 6f (7B, 마스킹 없음)</code></pre>
+
+<h2>Payload 길이 인코딩</h2>
+<table>
+<tr><th>7비트 값</th><th>실제 길이</th></tr>
+<tr><td>0–125</td><td>그 값 그대로</td></tr>
+<tr><td>126</td><td>다음 2바이트 (16비트 unsigned)</td></tr>
+<tr><td>127</td><td>다음 8바이트 (64비트 unsigned, 최상위 비트 0)</td></tr>
+</table>
+
+<h2>opcode 표</h2>
+<table>
+<tr><th>값</th><th>이름</th><th>분류</th><th>메모</th></tr>
+<tr><td><code>0x0</code></td><td>Continuation</td><td>데이터</td><td>단편화 조각 (첫 조각 제외)</td></tr>
+<tr><td><code>0x1</code></td><td>Text</td><td>데이터</td><td>유효한 UTF-8 필수</td></tr>
+<tr><td><code>0x2</code></td><td>Binary</td><td>데이터</td><td></td></tr>
+<tr><td><code>0x3–0x7</code></td><td>(예약)</td><td>데이터</td><td></td></tr>
+<tr><td><code>0x8</code></td><td>Close</td><td>컨트롤</td><td>종료 핸드셰이크</td></tr>
+<tr><td><code>0x9</code></td><td>Ping</td><td>컨트롤</td><td>수신 시 Pong 의무</td></tr>
+<tr><td><code>0xA</code></td><td>Pong</td><td>컨트롤</td><td></td></tr>
+<tr><td><code>0xB–0xF</code></td><td>(예약)</td><td>컨트롤</td><td></td></tr>
+</table>
+
+<h2>규칙 요약</h2>
+<table>
+<tr><td>마스킹</td><td>클라→서버 <strong>MUST</strong> (TLS여도) · 서버→클라 <strong>MUST NOT</strong>. 위반 시 상대가 연결 종료</td></tr>
+<tr><td>마스킹 알고리즘</td><td><code>페이로드[i] XOR 키[i mod 4]</code>, 키는 프레임마다 무작위 4바이트 (§5.3)</td></tr>
+<tr><td>마스킹의 목적</td><td>암호화 아님 — 중간 프록시 캐시 오염 공격 차단 (§10.3)</td></tr>
+<tr><td>컨트롤 프레임</td><td>페이로드 ≤125B, 단편화 금지, 데이터 조각 사이 끼어들기 가능 (§5.5)</td></tr>
+<tr><td>단편화</td><td>첫 조각: FIN=0 + 실제 opcode → 중간: FIN=0 + 0x0 → 마지막: FIN=1 + 0x0 (§5.4)</td></tr>
+<tr><td>브라우저 API</td><td>단편화는 보이지 않음 — onmessage는 조립된 메시지 단위 (DevTools도 메시지 단위)</td></tr>
+</table>
+
+<footer>
+<p>출처 레슨: <a href="../lessons/0002-frame-structure.html">Lesson 0002</a> · <a href="handshake-cheatsheet.html">핸드셰이크 치트시트</a> · <a href="glossary.html">용어집</a></p>
+</footer>
+</body>
+</html>

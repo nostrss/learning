@@ -1,0 +1,7 @@
+# Notes
+
+- 사용자: 프론트엔드 개발자, 브라우저 WebSocket API 직접 사용, 재연결/상태관리 래퍼 자체 구현 경험
+- 학습 깊이: RFC 수준 원함 (스펙 원문을 읽을 수 있는 수준이 목표)
+- 언어: 한국어로 티칭, 기술 용어는 원어 유지
+- 커리큘럼 초안: ① 핸드셰이크 → ② 프레임 구조(opcode/마스킹) → ③ 종료 핸드셰이크와 close code(래퍼 실무 직결) → ④ ping/pong과 keepalive → ⑤ HTTP/2·3 위의 WebSocket(RFC 8441/9220) → ⑥ 확장(permessage-deflate)
+- 커뮤니티 가입 선호 미확인

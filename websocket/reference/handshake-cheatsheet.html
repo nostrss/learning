@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference — WebSocket 열림 핸드셰이크 치트시트</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<h1><span class="lesson-number">Reference · WebSocket 프로토콜</span>
+열림 핸드셰이크 치트시트</h1>
+
+<h2>클라이언트 요청 (RFC 6455 §4.1)</h2>
+<pre><code>GET /path HTTP/1.1          <span class="dim">← 반드시 GET, HTTP/1.1 이상</span>
+Host: server.example.com     <span class="dim">← 필수</span>
+Upgrade: websocket           <span class="dim">← 필수, 값 대소문자 무관</span>
+Connection: Upgrade          <span class="dim">← 필수</span>
+Sec-WebSocket-Key: [base64]  <span class="dim">← 필수, 무작위 16바이트, 연결마다 새로</span>
+Sec-WebSocket-Version: 13    <span class="dim">← 필수, 항상 13</span>
+Origin: https://...          <span class="dim">← 브라우저 클라이언트는 필수</span>
+Sec-WebSocket-Protocol: ...  <span class="dim">← 선택, 서브프로토콜 협상</span>
+Sec-WebSocket-Extensions: ...<span class="dim">← 선택, 예: permessage-deflate</span></code></pre>
+
+<h2>서버 응답 (§4.2)</h2>
+<pre><code>HTTP/1.1 101 Switching Protocols
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Accept: [계산값]  <span class="dim">← 아래 공식, 틀리면 클라이언트가 연결 실패 처리</span></code></pre>
+
+<h2>Accept 계산 공식 (§1.3)</h2>
+<pre><code>Accept = base64( SHA1( Sec-WebSocket-Key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11" ) )
+
+예시 (RFC 원문):
+Key:    "dGhlIHNhbXBsZSBub25jZQ=="
+Accept: "s3pPLMBiTxaQ9kYGzzhZRbK+xOo="</code></pre>
+
+<h2>빠른 사실</h2>
+<table>
+<tr><td>URI 스킴</td><td><code>ws://</code> (기본 포트 80) · <code>wss://</code> (기본 포트 443, TLS)</td></tr>
+<tr><td>101 이후</td><td>해당 TCP 연결에는 HTTP가 아닌 WebSocket 프레임만 흐름</td></tr>
+<tr><td>101 외 응답</td><td>클라이언트는 핸드셰이크 실패로 처리 (426 = 버전 불일치 안내)</td></tr>
+<tr><td>표준화</td><td>프로토콜: IETF <a href="https://datatracker.ietf.org/doc/html/rfc6455">RFC 6455</a> · 브라우저 API: <a href="https://websockets.spec.whatwg.org/">WHATWG</a></td></tr>
+<tr><td>HTTP/2·3 위에서</td><td><code>Upgrade</code> 없음 → Extended CONNECT (RFC 8441 / RFC 9220)</td></tr>
+</table>
+
+<footer>
+<p>출처 레슨: <a href="../lessons/0001-websocket-vs-http-handshake.html">Lesson 0001</a> · <a href="glossary.html">용어집</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{
+  "content": "<p>This resource contains problems related to probability, Monty Hall problem.</p>\n",
+  "content_type": "resource",
+  "description": "This resource contains problems related to probability, Monty Hall problem. ",
+  "draft": false,
+  "file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/fa9685899c6b9d079d36ac3f9a1ccce6_MIT6_042JF10_rec17.pdf",
+  "file_size": 124032,
+  "file_type": "application/pdf",
+  "image_metadata": {
+    "caption": "",
+    "credit": "",
+    "image-alt": ""
+  },
+  "iscjklanguage": false,
+  "learning_resource_types": [
+    "Recitations"
+  ],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "ocw_type": "OCWFile",
+  "parent_title": "Recitations",
+  "parent_type": "CourseSection",
+  "parent_uid": "088adbb7-d512-5527-c5ec-766f9536ea40",
+  "resourcetype": "Document",
+  "title": "Problems for Recitation 17",
+  "uid": "fa968589-9c6b-9d07-9d36-ac3f9a1ccce6",
+  "video_files": {
+    "archive_url": "",
+    "video_captions_file": "",
+    "video_thumbnail_file": "",
+    "video_transcript_file": ""
+  },
+  "video_metadata": {
+    "video_speakers": "",
+    "video_tags": "",
+    "youtube_description": "",
+    "youtube_id": ""
+  }
+}

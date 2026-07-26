@@ -1,0 +1,15 @@
+
+{
+  "content": "<p><table>\n\n<thead>\n\n<tr>\n\n<th>\n\nASSN #\n</th>\n\n<th>\n\nPROBLEM SETS\n</th>\n</p>\n</tr>\n\n<p></thead>\n\n<tr>\n\n<td>\n\n1\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_assn01/index.html\">PDF</a>)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\n2\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_assn02/index.html\">PDF</a>)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\n3\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_assn03/index.html\">PDF</a>)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\n4\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_assn04/index.html\">PDF</a>)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\n5\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_assn05/index.html\">PDF</a>)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\n6\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_assn06/index.html\">PDF</a>)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\n7\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_assn07/index.html\">PDF</a>)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\n8\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_assn08/index.html\">PDF</a>)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\n9\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_assn09/index.html\">PDF</a>)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\n10\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_assn10/index.html\">PDF</a>)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\n11\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_assn11/index.html\">PDF</a>)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\n12\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_assn12/index.html\">PDF</a>)\n</td>\n</p>\n</tr>\n\n</table>\n\n",
+  "content_type": "page",
+  "description": "This section provides the problem sets assigned for the course.",
+  "draft": false,
+  "iscjklanguage": false,
+  "learning_resource_types": [
+    "Assignments"
+  ],
+  "ocw_type": "CourseSection",
+  "title": "Assignments",
+  "uid": "08112a09-cc2d-67e2-273a-6f15e8d43486"
+}
+

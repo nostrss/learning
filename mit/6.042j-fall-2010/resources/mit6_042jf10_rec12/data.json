@@ -1,0 +1,38 @@
+{
+  "content": "<p>This resource contains problems related to the L-tower problem, double sums.</p>\n",
+  "content_type": "resource",
+  "description": "This resource contains problems related to the L-tower problem, double sums. ",
+  "draft": false,
+  "file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/8aabc1050ffc9f74ceeea7b361a58b9c_MIT6_042JF10_rec12.pdf",
+  "file_size": 150407,
+  "file_type": "application/pdf",
+  "image_metadata": {
+    "caption": "",
+    "credit": "",
+    "image-alt": ""
+  },
+  "iscjklanguage": false,
+  "learning_resource_types": [
+    "Recitations"
+  ],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "ocw_type": "OCWFile",
+  "parent_title": "Recitations",
+  "parent_type": "CourseSection",
+  "parent_uid": "088adbb7-d512-5527-c5ec-766f9536ea40",
+  "resourcetype": "Document",
+  "title": "Problems for Recitation 12",
+  "uid": "8aabc105-0ffc-9f74-ceee-a7b361a58b9c",
+  "video_files": {
+    "archive_url": "",
+    "video_captions_file": "",
+    "video_thumbnail_file": "",
+    "video_transcript_file": ""
+  },
+  "video_metadata": {
+    "video_speakers": "",
+    "video_tags": "",
+    "youtube_description": "",
+    "youtube_id": ""
+  }
+}

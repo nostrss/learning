@@ -1,0 +1,843 @@
+
+{
+  "content": "<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-1-introduction-and-proofs/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/L3LMbpZIKhQ/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 1: Introduction and Proofs</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-2-induction/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/z8HKWUWS-lA/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 2: Induction</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-3-strong-induction/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/NuGDkmwEObM/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 3: Strong Induction</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-4-number-theory-i/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/NuY7szYSXSw/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 4: Number Theory I</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-5-number-theory-ii/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/XX7ePR21Ook/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 5: Number Theory II</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-6-graph-theory-and-coloring/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/h9wxtqoa1jY/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 6: Graph Theory and Coloring</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-7-matching-problems/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/5RSMLgy06Ew/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 7: Matching Problems</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-8-graph-theory-ii-minimum-spanning-trees/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/GJpt_3ie4WU/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 8: Graph Theory II: Minimum Spanning Trees</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-9-communication-networks/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/bTyxpoi2dmM/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 9: Communication Networks</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-10-graph-theory-iii/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/DOIp5D7VMS4/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 10: Graph Theory III</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-11-relations-partial-orders-and-scheduling/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/1nScXLQAQ9A/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 11: Relations, Partial Orders, and Scheduling</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-12-sums/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/fAeShezAGLE/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 12: Sums</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-13-sums-and-asymptotics/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/X9eErxRjQEI/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 13: Sums and Asymptotics</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-14-divide-and-conquer-recurrences/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/Kqf0uO0oV6s/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 14: Divide and Conquer Recurrences</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-15-linear-recurrences/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/TWBB-JlmYUc/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 15: Linear Recurrences</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-16-counting-rules-i/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/pNt5Ll6hGqo/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 16: Counting Rules I</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-17-counting-rules-ii/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/09yIb3VHhMI/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 17: Counting Rules II</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-18-probability-introduction/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/SmFwFdESMHI/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 18: Probability Introduction</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-19-conditional-probability/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/E6FbvM-FGZ8/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 19: Conditional Probability</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-20-independence/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/l1BCv3qqW4A/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 20: Independence</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-21-random-variables/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/MOfhhFaQdjw/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 21: Random Variables</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-22-expectation-i/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/gGlMSe7uEkA/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 22: Expectation I</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-23-expectation-ii/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/oI9fMUqgfxY/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 23: Expectation II</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-24-large-deviations/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/q4mwO2qS2z4/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 24: Large Deviations</h5>\n      </div>\n    </div>\n  </a>\n</div>\n<div class=\"mb-2 border-gray rounded video-gallery-card\">\n  <a class=\"video-link\" href=\"../../resources/lecture-25-random-walks/index.html\">\n    <div class=\"inner-container\">\n      <div class=\"left-col\"><img class=\"thumbnail\" src=\"https://img.youtube.com/vi/56iFMY8QW2k/default.jpg\" alt=\"\" /></div>\n      <div class=\"right-col\">\n        <h5 class=\"video-title\">Lecture 25: Random Walks</h5>\n      </div>\n    </div>\n  </a>\n</div>\n\n\n",
+  "content_type": "video_gallery",
+  "description": "This section provide video lectures on mathematics for computer science.",
+  "draft": false,
+  "is_media_gallery": true,
+  "iscjklanguage": false,
+  "learning_resource_types": [
+    "Lecture Videos"
+  ],
+  "ocw_type": "CourseSection",
+  "title": "Video Lectures",
+  "uid": "7e5e7922-54d7-0355-0b60-881541fa6160",
+  "videos": [
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "101709177",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 1: Introduction and Proofs",
+      "uid": "db3197f7-6341-e501-7ef0-8ba6f5850f78",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec01_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/85c8033144aa50c8ae567f744dc1356b_L3LMbpZIKhQ.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/L3LMbpZIKhQ/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/35948f025420c52f2c6c18d2da9e266b_L3LMbpZIKhQ.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "L3LMbpZIKhQ"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "182950697",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 2: Induction",
+      "uid": "538a5a75-a309-7832-4d0b-a06505eff624",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec02_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/bf62753df9ea5b6cbdf73887ca43ffd1_z8HKWUWS-lA.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/z8HKWUWS-lA/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/3e3c5ae1dd04aab8de88a9cf9f16544f_z8HKWUWS-lA.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "z8HKWUWS-lA"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "189178478",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "Top Ten Proof Techniques Not Allowed in 6.042 ([PDF](/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/mit6_042jf10_proof))",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 3: Strong Induction",
+      "uid": "a5d908a7-33ca-e6fd-5116-94b5e53c197c",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec03_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/9e1fdc4fadf45c179910013b3448249e_NuGDkmwEObM.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/NuGDkmwEObM/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/45f6debd41091c3e1a78c3d72be1d8cb_NuGDkmwEObM.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "NuGDkmwEObM"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "185171468",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 4: Number Theory I",
+      "uid": "a71dc64c-af8c-846a-0eb8-3536fdaa2f19",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec04_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/20c5d8395f425cb8910e3f678419be40_NuY7szYSXSw.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/NuY7szYSXSw/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/e5842da6cbc94ba2b8f61bedca94c518_NuY7szYSXSw.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "NuY7szYSXSw"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "181835938",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 5: Number Theory II",
+      "uid": "ef943c65-3bc6-af7c-c364-5bbd80d64ce2",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec05_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/d6e814a190ae55b18b806c920060ae77_XX7ePR21Ook.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/XX7ePR21Ook/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/c2c73b8f33d9c0595ef6abb372271200_XX7ePR21Ook.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "XX7ePR21Ook"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "190819288",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 6: Graph Theory and Coloring",
+      "uid": "fcb5da11-f57c-afc8-587e-051bab93f81f",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec06_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/ebd05945c1b35a019089c5a683a66005_h9wxtqoa1jY.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/h9wxtqoa1jY/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/1ccaf180bcd244fddd32e60789fa922f_h9wxtqoa1jY.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "h9wxtqoa1jY"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "190401016",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "The Mating Algorithm ([PDF](/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/mit6_042jf10_mating))",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 7: Matching Problems",
+      "uid": "9694c213-2f52-0ce3-ddc5-530aff3a2e4d",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec07_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/67ed23c645985789b5389c97458c1b7f_5RSMLgy06Ew.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/5RSMLgy06Ew/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/c53bca93ceaede29a7983409ec7e233c_5RSMLgy06Ew.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "5RSMLgy06Ew"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "192137629",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 8: Graph Theory II: Minimum Spanning Trees",
+      "uid": "dd294d5a-a91d-79e9-2e58-2bcabb9a90e1",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec08_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/b7045f84ebb8543fbc983b397c2195ec_GJpt_3ie4WU.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/GJpt_3ie4WU/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/4cd9e7dafa48708210af272844003398_GJpt_3ie4WU.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "GJpt_3ie4WU"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "192119666",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 9: Communication Networks",
+      "uid": "b0784a8c-6f50-97fb-dafe-14c3da96e8a6",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec09_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/946ac3e212aa5eacb6660066bce14bfb_bTyxpoi2dmM.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/bTyxpoi2dmM/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/fca5cc3f1014121da9b7059254f58466_bTyxpoi2dmM.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "bTyxpoi2dmM"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "190781423",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 10: Graph Theory III",
+      "uid": "2c381039-5169-532f-cb6b-0ee4b3c425e2",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec10_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/880197a96ac550e58aa4f0b4bf1c7d36_DOIp5D7VMS4.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/DOIp5D7VMS4/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/116f983b7d45c3199eaa66a91d817db4_DOIp5D7VMS4.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "DOIp5D7VMS4"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "147351067",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 11: Relations, Partial Orders, and Scheduling",
+      "uid": "762918d2-d7c9-23df-c476-ebdab88adf4c",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec11_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/8f4ed13c35e35a77a87194f06342e031_1nScXLQAQ9A.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/1nScXLQAQ9A/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/df48391c844a4a9a03de190cc289cf10_1nScXLQAQ9A.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "1nScXLQAQ9A"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "180482198",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 12: Sums",
+      "uid": "3ab15973-2cf8-7536-52d2-c1ff154f1a4a",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec12_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/c0ebc685934558d9839900cf64f16c97_fAeShezAGLE.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/fAeShezAGLE/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/35c5b44faacb08f9bcd51cdf5d22506e_fAeShezAGLE.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "fAeShezAGLE"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "192676864",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 13: Sums and Asymptotics",
+      "uid": "cf215213-a0c6-da44-f33f-b7e6725bdaf2",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec13_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/e2983d81cfef5c9c9f3726d1b597e9a3_X9eErxRjQEI.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/X9eErxRjQEI/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/0ee7810a0f2b2cded346b7ae55814e21_X9eErxRjQEI.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "X9eErxRjQEI"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "190622778",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 14: Divide and Conquer Recurrences",
+      "uid": "098ba004-1cbb-6df3-83f0-decb5057952b",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec14_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/94dd474e985150f9b8fcb4f7b5545dd8_Kqf0uO0oV6s.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/Kqf0uO0oV6s/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/fa1c71923e2802c8415a16fadb541bb0_Kqf0uO0oV6s.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "Kqf0uO0oV6s"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "180411234",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 15: Linear Recurrences",
+      "uid": "2f2431fe-e730-cb09-e8fa-0bd8a756ecf2",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec15_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/d8296a895afb5ff49740b12fe2aadd68_TWBB-JlmYUc.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/TWBB-JlmYUc/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/eb8fc3c5ca462d307112e4fcedda39da_TWBB-JlmYUc.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "TWBB-JlmYUc"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "184352307",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 16: Counting Rules I",
+      "uid": "246f4ea2-1123-952f-21e3-c53984b9b218",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec16_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/ee5991c92d325a148f79c4f626aec33a_pNt5Ll6hGqo.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/pNt5Ll6hGqo/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/d9cfa23d44c5aa8f81fae627d0bb30dd_pNt5Ll6hGqo.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "pNt5Ll6hGqo"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "196727647",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 17: Counting Rules II",
+      "uid": "1d574792-83e7-dce2-a6eb-f01d8ac8ee5f",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec17_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/a88d59facb1857729431bc6366c0b047_09yIb3VHhMI.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/09yIb3VHhMI/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/545c0e4f7df07d15c4fbf6d3d0ed77dc_09yIb3VHhMI.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "09yIb3VHhMI"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "193507087",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 18: Probability Introduction",
+      "uid": "a579fb86-0521-a305-2cce-0f404f80fc7c",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec18_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/968fa06d72c65669b8997379cb3dc539_SmFwFdESMHI.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/SmFwFdESMHI/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/e38df7d17bc4b9e21ac6c9347279a8d0_SmFwFdESMHI.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "SmFwFdESMHI"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "188344073",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 19: Conditional Probability",
+      "uid": "6d588b38-21ae-af00-d101-d86f29a4bacf",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec19_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/260f5c2f0c955cd0a1c48929a058d7cf_E6FbvM-FGZ8.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/E6FbvM-FGZ8/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/472fb084c579c044b7c3ee7a0f86d8ff_E6FbvM-FGZ8.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "E6FbvM-FGZ8"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "188923003",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 20: Independence",
+      "uid": "8e180304-50f6-7e1d-d860-281e4c93b825",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec20_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/be0ffd23101d59c78fca79c7a58b2f76_l1BCv3qqW4A.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/l1BCv3qqW4A/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/6388bd9f7ac0cad66c505d5f76c4ffef_l1BCv3qqW4A.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "l1BCv3qqW4A"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "191130454",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 21: Random Variables",
+      "uid": "860c6c33-b7f3-a6a1-9c32-9bf115756045",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec21_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/f883f89603b757c0b60579d7d18606e1_MOfhhFaQdjw.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/MOfhhFaQdjw/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/26637c51d9ed01c61aa160f5f4a20e26_MOfhhFaQdjw.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "MOfhhFaQdjw"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "193214100",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 22: Expectation I",
+      "uid": "ad044d67-9407-6af9-3f15-efb8a34bb8d3",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec22_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/54dd026a90fe5b06976423b3b5b255bf_gGlMSe7uEkA.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/gGlMSe7uEkA/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/8d9320ea601c41975fb1e2cdc0c99c40_gGlMSe7uEkA.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "gGlMSe7uEkA"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "192821031",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 23: Expectation II",
+      "uid": "ffc3342f-eaa1-ee9e-66c8-d6cdbb30ca8d",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec23_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/aaa44706c6a952dba5c2de829dbf0515_oI9fMUqgfxY.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/oI9fMUqgfxY/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/dc4f198af215cde514be1c46c806d063_oI9fMUqgfxY.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "oI9fMUqgfxY"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "192098043",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 24: Large Deviations",
+      "uid": "fd00ebc4-7d50-6409-9fe7-4db86b85c8b0",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec24_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/cbfffe96b49557ef9bacab127b342d74_q4mwO2qS2z4.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/q4mwO2qS2z4/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/9f082671fda66fa7b8639a4922bd48fd_q4mwO2qS2z4.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "q4mwO2qS2z4"
+      }
+    },
+    {
+      "content_type": "resource",
+      "description": "",
+      "draft": false,
+      "end_time": "",
+      "file": null,
+      "file_size": "179365614",
+      "iscjklanguage": false,
+      "learning_resource_types": [
+        "Lecture Videos"
+      ],
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "ocw_type": "",
+      "optional_tab_title": "",
+      "optional_text": "",
+      "parent_title": "Video Lectures",
+      "parent_type": "CourseSection",
+      "related_resources_text": "",
+      "resource_index_text": "",
+      "resourcetype": "Video",
+      "start_time": "",
+      "title": "Lecture 25: Random Walks",
+      "uid": "db334a5e-76cc-98b1-4e66-f2c6004ec744",
+      "video_files": {
+        "archive_url": "http://www.archive.org/download/MIT6.042JF10/MIT6_042JF10_lec25_300k.mp4",
+        "video_captions_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/653218bb9ce55213b7cd3f91cfdf6b1c_56iFMY8QW2k.vtt",
+        "video_thumbnail_file": "https://img.youtube.com/vi/56iFMY8QW2k/default.jpg",
+        "video_transcript_file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/1d5106863bee19ab21a7ac49503d3403_56iFMY8QW2k.pdf"
+      },
+      "video_metadata": {
+        "youtube_id": "56iFMY8QW2k"
+      }
+    }
+  ]
+}
+

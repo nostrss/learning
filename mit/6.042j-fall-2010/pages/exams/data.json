@@ -1,0 +1,15 @@
+
+{
+  "content": "<p>All exams and solutions are courtesy of the instructors named on the first page, and are used with permission. Solutions to the final exam are not available.</p>\n<p><table>\n\n<thead>\n\n<tr>\n\n<th>\n\nDESCRIPTIONS\n</th>\n\n<th>\n\nEXAMS\n</th>\n\n<th>\n\nSOLUTIONS\n</th>\n</p>\n</tr>\n\n<p></thead>\n\n<tr>\n\n<td>\n\nMidterm practice problems\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_mid_practice/index.html\">PDF</a>)\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_mid_pctce_sol/index.html\">PDF</a>)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\nMidterm\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_midterm/index.html\">PDF</a>)\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_midterm_sol/index.html\">PDF</a>)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\n2004 final exam\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_final_2004/index.html\">PDF</a>)\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_fnl_2004_sol/index.html\">PDF</a>)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\n2006 final exam\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_final_2006/index.html\">PDF</a>)\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_fnl_2006_sol/index.html\">PDF</a>)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\n2008 final exam\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_final_2008/index.html\">PDF</a>)\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_fnl_2008_sol/index.html\">PDF</a>)\n</td>\n</p>\n<p></tr>\n\n<tr>\n\n<td>\n\nFinal exam\n</td>\n\n<td>\n\n(<a href=\"../../resources/mit6_042jf10_final/index.html\">PDF</a>)\n</td>\n\n<td>\n\n \n</td>\n</p>\n</tr>\n\n</table>\n\n",
+  "content_type": "page",
+  "description": "This section provides the exams for the course, solutions, and practice problems.",
+  "draft": false,
+  "iscjklanguage": false,
+  "learning_resource_types": [
+    "Exams"
+  ],
+  "ocw_type": "CourseSection",
+  "title": "Exams",
+  "uid": "2fed6634-52c5-103a-ec78-02b3223aa48e"
+}
+

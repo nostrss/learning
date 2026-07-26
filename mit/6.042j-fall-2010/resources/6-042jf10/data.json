@@ -1,0 +1,21 @@
+{
+  "content": "<p>6.042 course logo. (Image by Will Drevo. Used with permission.)</p>\n",
+  "content_type": "resource",
+  "description": "6.042 course logo. (Image by Will Drevo. Used with permission.)",
+  "draft": false,
+  "file": "/courses/6-042j-mathematics-for-computer-science-fall-2010/42ba5c4fb2e9df43aa8b2bc0566b459f_6-042jf10.jpg",
+  "file_size": 20942,
+  "file_type": "image/jpeg",
+  "image_metadata": {
+    "caption": "6.042 course logo. (Image by Will Drevo. Used with permission.)",
+    "credit": "",
+    "image-alt": "Four dice representing the course number 6.042."
+  },
+  "iscjklanguage": false,
+  "learning_resource_types": [],
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "ocw_type": "OCWImage",
+  "resourcetype": "Image",
+  "title": "6-042jf10.jpg",
+  "uid": "42ba5c4f-b2e9-df43-aa8b-2bc0566b459f"
+}

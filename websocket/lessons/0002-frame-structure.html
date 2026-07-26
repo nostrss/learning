@@ -38,7 +38,7 @@
 
 <table>
 <tr><th>필드</th><th>크기</th><th>의미</th></tr>
-<tr><td><span class="hexA"><strong>FIN</strong></span></td><td>1비트</td><td>1이면 이 프레임이 메시지의 마지막 조각. 0이면 뒤에 조각이 더 온다 (단편화)</td></tr>
+<tr><td><span class="hexA"><strong>FIN</strong></span></td><td>1비트</td><td>1이면 이 프레임이 메시지의 마지막 조각. 0이면 뒤에 조각이 더 온다 — 큰 메시지를 청크로 나눠 보내는 것을 <em>단편화(fragmentation)</em>라 한다</td></tr>
 <tr><td>RSV1–3</td><td>각 1비트</td><td>확장 협상이 없으면 반드시 0 (permessage-deflate가 RSV1을 쓴다 — 후속 레슨)</td></tr>
 <tr><td><span class="hexA"><strong>opcode</strong></span></td><td>4비트</td><td>페이로드의 해석 방법 (아래 표)</td></tr>
 <tr><td><span class="hexB"><strong>MASK</strong></span></td><td>1비트</td><td>페이로드가 마스킹됐는가. 클라→서버는 항상 1</td></tr>
@@ -105,7 +105,31 @@
 <tr><td><code>0x9</code> / <code>0xA</code></td><td>Ping / Pong</td><td>컨트롤</td><td>keepalive — 레슨 4에서 상세히</td></tr>
 </table>
 
-<p>컨트롤 프레임(0x8~0xF)에는 두 가지 강한 제약이 있다: <strong>페이로드 125바이트 이하, 단편화 금지</strong> (<a href="https://datatracker.ietf.org/doc/html/rfc6455#section-5.5">§5.5</a>). 덕분에 컨트롤 프레임은 단편화된 데이터 메시지의 조각들 <em>사이에</em> 끼어들 수 있다 — 긴 파일을 보내는 중에도 ping이 지나갈 수 있는 이유다.</p>
+<div class="note">
+<strong>용어 정리: opcode는 필드, 컨트롤 프레임은 분류.</strong> DOM 이벤트에 비유하면 정확하다 — opcode는 <code>event.type</code>처럼 모든 프레임에 있는 <em>칸</em>이고, <code>0x1</code>·<code>0x9</code>는 <code>"click"</code>·<code>"keydown"</code> 같은 <em>값</em>이며, "컨트롤 프레임"은 "마우스 이벤트"처럼 값들의 묶음을 부르는 <em>통칭</em>이다. 즉 opcode 값이 0x8~0xF 범위인 프레임을 컨트롤 프레임(연결 제어용), 0x0~0x7이면 데이터 프레임(내용물 운반용)이라 부른다. 받는 쪽 코드도 <code>if (opcode >= 0x8)</code> 같은 분기 하나로 두 갈래 처리를 가른다.
+</div>
+
+<p>컨트롤 프레임(0x8~0xF)에는 두 가지 강한 제약이 있다: <strong>페이로드 125바이트 이하, 그리고 컨트롤 프레임 <em>자신을</em> 단편화하는 것 금지</strong> (<a href="https://datatracker.ietf.org/doc/html/rfc6455#section-5.5">§5.5</a>). 주의 — 데이터 메시지의 단편화는 §5.4가 허용하는 정상 동작이고, 금지되는 것은 ping/close 같은 컨트롤 프레임을 여러 조각으로 쪼개는 것이다. 즉 컨트롤 프레임은 FIN=0으로 시작할 수 없고, 언제나 프레임 하나 = 완결이다. 덕분에 컨트롤 프레임은 단편화된 데이터 메시지의 조각들 <em>사이에</em> 끼어들 수 있다 — 긴 파일을 보내는 중에도 ping이 지나갈 수 있는 이유다.</p>
+
+<h3>ping은 어떻게 "끼어드는가"</h3>
+<p>전제부터: WebSocket은 TCP 연결 하나 위에서 프레임이 <strong>한 줄로 순서대로</strong> 흐른다. 추월 차선은 없다. 프레임 하나가 전송을 시작하면 끝날 때까지 다른 것이 나갈 수 없으므로, 만약 100MB 메시지를 <em>프레임 하나</em>로 보내면 그동안 이 연결은 완전히 막힌다 — keepalive ping이 몇 분씩 못 나가서 타임아웃으로 끊기는 사태가 벌어진다.</p>
+<p>단편화가 이 문제를 푼다. 큰 메시지를 여러 프레임으로 쪼개면 <strong>조각과 조각 사이가 끼어들 수 있는 틈</strong>이 되고, 보내는 쪽은 그 틈에 컨트롤 프레임을 밀어 넣을 수 있다. 와이어에 실제로 흐르는 순서는 이렇다:</p>
+
+<pre><code>프레임 ① <span class="hexA">FIN=0, opcode=0x2</span> (Binary)  파일 조각 1  <span class="dim">← 메시지 A 시작</span>
+프레임 ② <span class="hexA">FIN=0, opcode=0x0</span> (Cont.)   파일 조각 2  <span class="dim">← 메시지 A 계속</span>
+프레임 ③ <span class="hexC">FIN=1, opcode=0x9</span> (Ping)    ≤125B        <span class="dim">← 끼어든 ping (그 자체로 완결)</span>
+프레임 ④ <span class="hexA">FIN=1, opcode=0x0</span> (Cont.)   파일 조각 3  <span class="dim">← 메시지 A 종료</span></code></pre>
+
+<p>받는 쪽은 프레임 헤더의 opcode만 보고 두 갈래로 처리한다: <code>0x0</code>(continuation)이면 조립 중인 메시지 A의 버퍼에 이어 붙이고, 컨트롤 opcode(<code>0x8</code>~)면 <strong>조립 중인 버퍼와 무관하게 즉시 처리</strong>한다(ping이면 pong 응답). ③이 지나가도 A의 조립은 아무 영향을 받지 않고, ④가 오면 A가 완성된다.</p>
+<p>이 두 갈래 처리가 안전하게 성립하는 것이 정확히 §5.5의 두 제약 덕분이다:</p>
+<ul>
+<li><strong>단편화 금지</strong> → 컨트롤 프레임은 항상 프레임 하나로 완결된다. 받는 쪽이 "이건 A의 조각인가?"를 고민할 필요가 없다 — opcode가 0x0이 아니므로 즉시 구분되고, 따로 조립할 것도 없다. 만약 ping을 쪼갤 수 있다면 그 두 번째 조각은 opcode 0x0이 될 텐데, continuation에는 소속 식별자가 없어 A의 조각과 구분이 불가능해진다 — 금지가 필요한 이유다.</li>
+<li><strong>≤125바이트</strong> → 끼어들어도 A의 전송을 지연시키는 시간이 미미하다. 크기 제한이 없다면 "끼어든 프레임" 자체가 새로운 차선 점거자가 된다.</li>
+</ul>
+
+<div class="note">
+<strong>반대로, 데이터 메시지끼리는 끼어들 수 없다.</strong> §5.4는 "한 메시지의 조각들 사이에 다른 메시지의 조각을 끼우는 것"을 금지한다. 이유는 헤더 구조에 있다: continuation 프레임(0x0)에는 "어느 메시지의 조각인지" 식별자가 없다. 조립 중인 메시지는 항상 하나뿐이라는 규칙이 있어야 받는 쪽이 0x0을 어디에 붙일지 알 수 있다. 즉 WebSocket에는 멀티플렉싱이 없고, 컨트롤 프레임만이 유일한 우선 차선이다 — HTTP/2가 스트림 ID를 프레임마다 붙여 이 한계를 푼 것과 대비된다.
+</div>
 
 <div class="note">
 <strong>브라우저가 숨기는 것.</strong> 단편화(FIN=0 → continuation → FIN=1)는 브라우저 API에서 보이지 않는다. WHATWG 표준에 따라 브라우저는 조각을 모두 조립한 뒤 <strong>완성된 메시지 단위로만</strong> <code>onmessage</code>를 발생시킨다. DevTools Network 탭의 Messages도 프레임이 아니라 메시지를 보여준다 — 프레임 층을 실제로 보려면 Wireshark가 필요하다.
@@ -118,6 +142,31 @@
 <li>서버 → 클라이언트: <strong>마스킹 금지.</strong> 마스킹된 프레임을 받으면 클라이언트는 연결을 끊어야 한다</li>
 </ul>
 <p>XOR 한 번이 암호화일 리 없다 — 키가 프레임 안에 같이 실려 있으니 누구든 풀 수 있다. 목적은 기밀성이 아니라 <strong>중간 장비 보호</strong>다 (<a href="https://datatracker.ietf.org/doc/html/rfc6455#section-10.3">§10.3</a>): 악성 스크립트가 페이로드에 가짜 HTTP 요청처럼 <em>보이는</em> 바이트를 실어 보내면, 프로토콜을 모르는 낡은 프록시가 그걸 진짜 HTTP로 오해하고 응답을 캐시할 수 있다(캐시 오염 공격). 무작위 마스킹은 공격자가 와이어에 놓일 바이트를 <em>선택할 수 없게</em> 만들어 이를 차단한다.</p>
+<h3>스펙 원문으로 보는 공격과 방어 (§10.3)</h3>
+
+<p>이 캐시 오염 공격은 가설이 아니다. 스펙은 프로토콜 개발 중 <strong>실제 배포된 프록시들을 상대로 실험해 성공했다</strong>고 기록하고 있다 (<a href="https://www.adambarth.com/papers/2011/huang-chen-barth-rescorla-jackson.pdf">[TALKING]</a> 논문, "Talking to Yourself for Fun and Profit"):</p>
+
+<blockquote>
+The general form of the attack was to establish a connection to a server under the "attacker's" control, perform an UPGRADE on the HTTP connection ... and subsequently send data over that UPGRADEd connection <strong>that looked like a GET request for a specific known resource</strong> ... The remote server would respond with something that looked like a response to the fake GET request, and <strong>this response would be cached by a nonzero percentage of deployed intermediaries, thus poisoning the cache.</strong>
+<cite>— 번역: 공격자 소유 서버로 연결해 UPGRADE를 수행한 뒤, 그 연결 위로 <em>잘 알려진 리소스에 대한 GET 요청처럼 보이는</em> 데이터를 보낸다. 서버가 가짜 응답을 돌려주면, 배포된 중간 장비 중 일부가 이를 진짜 HTTP 응답으로 오해하고 캐시한다 — 캐시가 오염된다. 이후 같은 캐시를 쓰는 다른 사용자들이 그 "리소스"(예: 광고 네트워크의 스크립트)를 요청하면 공격자의 악성 스크립트를 받게 된다.</cite>
+</blockquote>
+
+<p>왜 하필 마스킹이 방어책인가? 스펙은 "HTTP처럼 안 보이는 프레임 헤더를 앞에 붙이는 것만으로는 부족하다"고 먼저 못박는다 — 세상의 모든 비표준 프록시가 낯선 헤더를 만났을 때 안전하게 동작하는지 전수 검증할 방법이 없기 때문이다. 그래서 택한 방어가 <em>바이트 선택권 자체를 빼앗는 것</em>이다:</p>
+
+<blockquote>
+Thus, the defense adopted is to mask all data from the client to the server, so that the remote script (attacker) <strong>does not have control over how the data being sent appears on the wire</strong> and thus cannot construct a message that could be misinterpreted by an intermediary as an HTTP request.
+<cite>— 번역: 클라이언트→서버의 모든 데이터를 마스킹함으로써, 공격자(원격 스크립트)가 <em>와이어에 실제로 놓이는 바이트의 모양을 통제할 수 없게</em> 만든다. 따라서 중간 장비가 HTTP 요청으로 오해할 만한 메시지를 구성하는 것 자체가 불가능해진다.</cite>
+</blockquote>
+
+<p>이 방어가 성립하려면 키가 <strong>프레임마다 새롭고, 예측 불가능</strong>해야 한다. 키가 예측되면 공격자는 "원하는 바이트 ⊕ 다음 키"를 미리 계산해 보내고, 클라이언트의 마스킹이 오히려 그것을 <em>복원</em>해주는 역공이 가능하기 때문이다 (XOR의 자기 역원 성질이 여기서는 공격자의 무기가 된다):</p>
+
+<blockquote>
+Clients MUST choose a new masking key for each frame, using an algorithm that cannot be predicted by end applications ... If the same key is used or a decipherable pattern exists for how the next key is chosen, the attacker can send a message that, when masked, could appear to be an HTTP request.
+<cite>— 번역: 클라이언트는 프레임마다 새 마스킹 키를, 애플리케이션이 예측할 수 없는 알고리즘(예: 암호학적 난수 생성기)으로 선택해야 한다. 같은 키를 재사용하거나 다음 키에 패턴이 있으면, 공격자는 마스킹된 결과가 HTTP 요청처럼 보이는 메시지를 만들 수 있다.</cite>
+</blockquote>
+
+<p>위 인코더 위젯의 "다시 인코딩" 버튼이 바로 이 MUST 조항의 시연이다. 그리고 서버→클라이언트 방향이 마스킹 <em>면제</em>인 이유도 §10.3이 직접 답한다: 위협 모델은 "클라이언트가 가짜 HTTP <em>요청</em>을 보내는 것"이고, 서버 응답만으로는 공격이 성립하지 않기 때문이다(가짜 응답이 캐시되려면 어차피 가짜 요청이 선행돼야 한다). 즉 보호가 필요한 채널은 클라→서버뿐이다.</p>
+
 <p><a href="0001-websocket-vs-http-handshake.html">레슨 1</a>의 Sec-WebSocket-Key와 같은 주제의식이다: WebSocket 스펙은 "프로토콜을 모르는 중간 장비"를 일관되게 경계한다. 핸드셰이크에서는 우발적 수락을 막고, 프레임에서는 캐시 오염을 막는다.</p>
 
 <div class="widget">

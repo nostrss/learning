@@ -33,7 +33,7 @@
 <tr id="fin"><td><strong>FIN</strong></td><td>프레임 헤더의 첫 비트. 1이면 메시지의 마지막 조각, 0이면 단편화된 조각이 더 이어진다.</td><td><a href="https://datatracker.ietf.org/doc/html/rfc6455#section-5.2">§5.2</a></td></tr>
 <tr id="masking"><td><strong>마스킹</strong> masking</td><td>클라→서버 프레임의 페이로드를 무작위 4바이트 키와 XOR하는 것 (<code>페이로드[i] XOR 키[i mod 4]</code>). 암호화가 아니라 중간 프록시 캐시 오염 방지 장치. 클라→서버 필수, 서버→클라 금지.</td><td><a href="https://datatracker.ietf.org/doc/html/rfc6455#section-5.3">§5.3</a>, <a href="https://datatracker.ietf.org/doc/html/rfc6455#section-10.3">§10.3</a></td></tr>
 <tr id="control-frame"><td><strong>컨트롤 프레임</strong><br>control frame</td><td>opcode 0x8~0xF인 프레임 (Close, Ping, Pong). 페이로드 125바이트 이하, 단편화 금지, 데이터 메시지의 조각 사이에 끼어들 수 있다.</td><td><a href="https://datatracker.ietf.org/doc/html/rfc6455#section-5.5">§5.5</a></td></tr>
-<tr id="fragmentation"><td><strong>단편화</strong> fragmentation</td><td>하나의 메시지를 여러 프레임으로 쪼개 보내는 것. 첫 조각(FIN=0, 실제 opcode) → 중간(FIN=0, 0x0) → 마지막(FIN=1, 0x0). 브라우저 API에서는 보이지 않는다.</td><td><a href="https://datatracker.ietf.org/doc/html/rfc6455#section-5.4">§5.4</a></td></tr>
+<tr id="fragmentation"><td><strong>단편화</strong> fragmentation</td><td>하나의 메시지를 여러 프레임(청크)으로 쪼개 보내는 것 — HTTP chunked 전송과 같은 발상. 첫 조각(FIN=0, 실제 opcode) → 중간(FIN=0, 0x0) → 마지막(FIN=1, 0x0). 브라우저 API에서는 보이지 않는다.</td><td><a href="https://datatracker.ietf.org/doc/html/rfc6455#section-5.4">§5.4</a></td></tr>
 </table>
 
 <footer>

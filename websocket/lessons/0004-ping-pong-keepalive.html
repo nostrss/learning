@@ -69,6 +69,20 @@ NOTE: A Ping frame may serve either as a <strong>keepalive</strong> or as a mean
 </table>
 <p>기본 전략은 <strong>서버 주도</strong>가 유리하다 — 서버의 프로토콜 ping에 브라우저가 자동 응답하므로 프론트 타이머·배터리 부담이 없다. 클라이언트 앱 하트비트는 "서버 죽음을 클라이언트가 먼저 감지해야 하는" 요구가 있을 때 더하는 것이다. 그리고 판정 직후 즉시 재연결하지 말 것 — 하트비트가 <em>감지</em>라면, §7.2.3 백오프는 그 뒤의 <em>회복</em> 규약이다.</p>
 
+<h3>수업 중 질문: 죽음 판정 후 재연결 중의 readyState는?</h3>
+<p>반전부터 — <strong>pong이 안 와서 죽었다고 판정한 순간에도 readyState는 여전히 1(OPEN)이다.</strong> TCP는 침묵하므로 브라우저는 아무것도 모른다. 죽음을 아는 것은 래퍼뿐이다. 이후의 전개:</p>
+<pre><code>절단          readyState = 1  <span class="dim">← 브라우저는 모름 (half-open)</span>
+타임아웃 판정  readyState = 1  <span class="dim">← 여전히! 판정의 주체는 래퍼다</span>
+ws.close()    readyState = 2  <span class="dim">← 상대가 죽어 Close 응답은 안 옴</span>
+브라우저 포기  readyState = 3, close 이벤트 (wasClean=false, 1006)
+백오프 대기    <span class="dim">살아있는 객체가 아예 없는 구간</span>
+재연결        새 객체의 readyState = 0  <span class="dim">← 옛 객체는 영원히 3</span></code></pre>
+<p>여기서 두 가지 사실이 드러난다:</p>
+<ul>
+<li><strong>readyState는 논리적 연결이 아니라 객체의 상태다.</strong> WebSocket 인스턴스는 일회용이며 CLOSED를 다시 여는 API는 없다 — 재연결은 항상 새 객체 생성이고, 래퍼는 참조를 갈아끼운다.</li>
+<li><strong>"재연결 중"이라는 상태는 스펙에 없다.</strong> 백오프 대기 중엔 객체가 없을 수 있으니 당연하다. 래퍼가 자체 상태 기계(예: RECONNECT_WAIT)를 만드는 이유이며, UI에 보여줄 연결 상태는 옛 객체의 readyState(판정 직후엔 아직 OPEN이라 거짓말을 한다)가 아니라 래퍼의 상태 기계에서 나와야 한다.</li>
+</ul>
+
 <div class="widget">
 <h3 style="margin-top:0">하트비트 시뮬레이터</h3>
 <p style="font-size:0.9rem">주기와 타임아웃을 정하고 시작한 뒤, "네트워크 절단"을 눌러 죽음이 감지되기까지 걸리는 시간을 관찰하라. 절단 시점에 따라 감지 지연이 어떻게 달라지는지(최악 ≈ 주기+타임아웃) 몇 번 반복해보라.</p>

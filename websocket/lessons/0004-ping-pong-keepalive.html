@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 4 — ping/pong과 keepalive</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<h1><span class="lesson-number">Lesson 0004 · WebSocket 프로토콜</span>
+ping/pong과 keepalive</h1>
+
+<p class="lede">연결은 "살아 있다"고 말해주지 않는다 — 침묵할 뿐이다. 그 침묵이 유휴인지 죽음인지 구분하는 프로토콜의 장치, 그리고 브라우저가 그 장치를 숨겨버린 탓에 래퍼가 직접 하트비트를 구현하게 된 사연.</p>
+
+<h2>핵심 답부터</h2>
+<p>Ping(<code>0x9</code>)과 Pong(<code>0xA</code>)은 <strong>상대가 아직 응답 가능한지 확인하는 컨트롤 프레임 쌍</strong>이다 (<a href="https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.2">§5.5.2</a>). Ping을 받으면 Pong으로 응답하는 것이 MUST다. 그런데 <strong>브라우저는 이 기능을 JS에 노출하지 않는다</strong> — 그래서 프론트엔드는 앱 수준 하트비트를 직접 만든다. 직접 구현하신 래퍼의 하트비트가 바로 그것이다.</p>
+
+<h2>왜 살아있음을 물어야 하는가 — TCP의 침묵 문제</h2>
+<p>TCP 연결은 트래픽이 없으면 <strong>완벽한 침묵</strong>이다. 문제는 죽은 연결도 똑같이 침묵한다는 것:</p>
+<ul>
+<li><strong>반열림(half-open) 연결</strong> — 상대 프로세스가 급사하거나(전원 차단, 커널 패닉), 중간 경로가 사라져도 내 쪽 TCP는 아무 통지도 받지 못한다. 다음 전송을 시도하고 한참 뒤에야 실패를 안다. 침묵하는 연결에서 "유휴"와 "죽음"은 구분 불가능하다.</li>
+<li><strong>중간 장비의 유휴 타임아웃</strong> — NAT, 로드밸런서, 리버스 프록시는 유휴 연결을 정리한다 (nginx <code>proxy_read_timeout</code>은 기본 60초!). 조용한 WebSocket은 중간 장비에게 "버려도 되는 연결"로 보인다. 레슨 1·2에서 본 "프로토콜을 모르는 중간 장비" 문제의 세 번째 얼굴이다.</li>
+</ul>
+<p>해법은 하나뿐이다: <strong>주기적으로 트래픽을 만들어서</strong> (1) 중간 장비에게 살아있음을 알리고 (2) 응답이 끊기면 죽음을 조기에 판정한다. 스펙의 표현으로:</p>
+<blockquote>
+NOTE: A Ping frame may serve either as a <strong>keepalive</strong> or as a means to <strong>verify that the remote endpoint is still responsive.</strong>
+<cite>— <a href="https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.2">RFC 6455 §5.5.2</a>. 번역: Ping은 keepalive(연결 유지 신호)로도, 상대가 아직 응답 가능한지 검증하는 수단으로도 쓸 수 있다.</cite>
+</blockquote>
+
+<h2>프로토콜의 규칙 (§5.5.2–5.5.3)</h2>
+<table>
+<tr><th>규칙</th><th>내용</th></tr>
+<tr><td>응답 의무</td><td>Ping을 받으면 Pong 전송이 <strong>MUST</strong>, "가능한 한 빨리"가 SHOULD. 유일한 면제: <em>이미 Close 프레임을 받은 경우</em></td></tr>
+<tr><td>페이로드 메아리</td><td>응답 Pong의 Application data는 대상 Ping의 것과 <strong>동일해야</strong> 한다 — 어느 ping에 대한 응답인지 대조할 수 있는 장치 (RTT 측정에도 쓰임)</td></tr>
+<tr><td>밀린 ping</td><td>Pong을 못 보낸 사이 Ping이 여러 개 쌓이면, <strong>가장 최근 것에만</strong> 응답해도 된다(MAY) — "살아있음" 확인엔 최신 하나면 충분하니까</td></tr>
+<tr><td>자발적 pong</td><td>Ping 없이 Pong만 보내는 것도 허용 — <strong>단방향 하트비트</strong>. 응답을 기대하지 않는다</td></tr>
+<tr><td>전송 시점</td><td>연결 수립 후 종료 전까지 언제든, 양쪽 모두 보낼 수 있다. 컨트롤 프레임이므로 단편화된 메시지 사이에도 끼어든다 (레슨 2)</td></tr>
+</table>
+
+<div class="note">
+<strong>예약해뒀던 경계 질문: CLOSING 중에 ping을 받으면?</strong> 레슨 3에서 "종료는 구간"임을 봤다. §5.5.2의 면제 조건은 정확히 "<em>이미 Close 프레임을 받은</em> 경우"뿐이다. 즉 내가 Close를 <em>보내기만 한</em> 상태(CLOSING)에서 ping이 오면 문면상 여전히 pong 의무가 있다 — §5.5.1의 전송 금지는 "데이터 프레임"에만 걸려 있고 컨트롤 프레임은 아니기 때문에 가능하다. 반대로 상대의 Close를 받은 뒤라면 pong 의무가 없다. 규칙의 주어와 조건을 따지는 읽기 — 레슨 2에서 연습한 그대로다.
+</div>
+
+<h2>브라우저의 비밀: JS에는 ping이 없다</h2>
+<p>WHATWG 표준의 <code>WebSocket</code> 인터페이스에는 <strong>ping을 보내는 API도, ping/pong을 관찰하는 이벤트도 없다.</strong> 프로토콜의 ping/pong은 존재하지만 전적으로 브라우저 내부의 일이다:</p>
+<ul>
+<li><strong>서버가 ping을 보내면</strong> → 브라우저가 프레임 층에서 <em>자동으로</em> pong을 응답한다. JS는 아무것도 모른다 (<code>onmessage</code>도 발화하지 않는다 — 데이터 프레임이 아니니까).</li>
+<li><strong>JS가 ping을 보내고 싶으면</strong> → 방법이 없다. 끝.</li>
+</ul>
+<p>반면 서버 측 라이브러리는 RFC 구현체답게 전부 노출한다 — Node <code>ws</code>의 <code>socket.ping()</code>과 <code>'pong'</code> 이벤트가 대표적이다. 이 비대칭이 실무 구도를 만든다:</p>
+<table>
+<tr><th>방향</th><th>수단</th><th>구현 주체</th></tr>
+<tr><td>서버 → 클라이언트 생존 확인</td><td>프로토콜 ping/pong (<code>socket.ping()</code>, 응답은 브라우저 자동)</td><td>백엔드</td></tr>
+<tr><td>클라이언트 → 서버 생존 확인</td><td><strong>앱 수준 하트비트</strong> — <code>ws.send('{"type":"ping"}')</code> 같은 일반 메시지 + 서버의 응답 메시지</td><td>프론트엔드 (래퍼!)</td></tr>
+</table>
+<p>즉 직접 구현하신 래퍼의 하트비트는 우회책이 아니라 <strong>브라우저 API의 공백을 메우는 표준적인 실무 패턴</strong>이다. 프로토콜 ping과 달리 앱 하트비트는 opcode <code>0x1</code>(Text)로 나가는 평범한 데이터 메시지라는 것 — 이제 프레임 층에서 정확히 구분할 수 있다.</p>
+
+<h2>하트비트 설계 — 죽음의 판정</h2>
+<p>하트비트의 산수는 단순하다: 주기 <em>T</em>초로 ping을 보내고, 마지막 응답 후 타임아웃 <em>W</em>초 안에 응답이 없으면 죽음으로 판정한다. 최악의 경우 감지 지연은 <strong>약 T + W초</strong>다. T를 줄이면 감지가 빨라지지만 트래픽·배터리 비용이 늘고, 중간 장비 타임아웃(60초류)보다는 짧아야 keepalive 효과가 있다. 판정 후의 행동은 레슨 3에서 배웠다: 연결을 버리고 §7.2.3의 백오프 재연결로 진입한다.</p>
+
+<h3>수업 중 질문: 그래서 몇 초가 좋은가</h3>
+<p>스펙은 이 값에 침묵한다 — 실무 지혜의 영역이다. 범위를 정하는 제약은 둘: 상한은 인프라 유휴 타임아웃(nginx·AWS ALB 기본 60초 → 안전하게 그 절반 이하), 하한은 트래픽·모바일 배터리 비용. 이 사이에서 업계가 수렴한 값이 <strong>주기 25초</strong>다 (<a href="https://socket.io/docs/v4/server-options/">Socket.IO 기본값</a>: <code>pingInterval 25s, pingTimeout 20s</code>). 타임아웃은 "몇 번의 RTT까지 봐줄 것인가"의 문제라 <strong>5~20초</strong> — 너무 짧으면 모바일의 일시 지연(터널 등)에 산 연결을 오판해 죽인다. 요구되는 감지 지연에서 T + W로 역산하라:</p>
+<table>
+<tr><th>프로필</th><th>주기</th><th>타임아웃</th><th>최악 감지</th><th>비고</th></tr>
+<tr><td>일반 웹앱 (채팅·알림·대시보드)</td><td>25s</td><td>15~20s</td><td>~45s</td><td>사실상 표준 — 특별한 이유 없으면 이것</td></tr>
+<tr><td>실시간 민감 (게임·트레이딩·협업 편집)</td><td>5~10s</td><td>3~5s</td><td>~15s</td><td>빠른 재연결이 UX에 직결될 때</td></tr>
+<tr><td>배터리 민감 (모바일 백그라운드)</td><td>30~55s</td><td>20s</td><td>~75s</td><td>NAT 상한에 근접 — 서버 주도 ping 권장</td></tr>
+</table>
+<p>기본 전략은 <strong>서버 주도</strong>가 유리하다 — 서버의 프로토콜 ping에 브라우저가 자동 응답하므로 프론트 타이머·배터리 부담이 없다. 클라이언트 앱 하트비트는 "서버 죽음을 클라이언트가 먼저 감지해야 하는" 요구가 있을 때 더하는 것이다. 그리고 판정 직후 즉시 재연결하지 말 것 — 하트비트가 <em>감지</em>라면, §7.2.3 백오프는 그 뒤의 <em>회복</em> 규약이다.</p>
+
+<div class="widget">
+<h3 style="margin-top:0">하트비트 시뮬레이터</h3>
+<p style="font-size:0.9rem">주기와 타임아웃을 정하고 시작한 뒤, "네트워크 절단"을 눌러 죽음이 감지되기까지 걸리는 시간을 관찰하라. 절단 시점에 따라 감지 지연이 어떻게 달라지는지(최악 ≈ 주기+타임아웃) 몇 번 반복해보라.</p>
+<label>ping 주기(초): <input type="text" id="hb-interval" value="3" inputmode="numeric" style="width:4rem"></label>
+<label style="margin-left:1rem">pong 타임아웃(초): <input type="text" id="hb-timeout" value="2" inputmode="numeric" style="width:4rem"></label><br>
+<button id="hb-start">시작</button>
+<button id="hb-cut" disabled>네트워크 절단</button>
+<button id="hb-reset" disabled>리셋</button>
+<output id="hb-log" style="font-family:monospace; font-size:0.85rem; white-space:pre-line; max-height:14rem; overflow-y:auto"></output>
+</div>
+
+<h2>확인 퀴즈</h2>
+<div class="quiz" id="quiz1"></div>
+
+<h2>다음 단계</h2>
+<div class="note">
+<strong>1차 자료 읽기.</strong> 오늘의 원문: <a href="https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.2">RFC 6455 §5.5.2–5.5.3</a> — 이제 한 페이지도 안 되는 분량이 그대로 읽힐 것이다. 실무 해설은 <a href="https://hpbn.co/websocket/">HPBN Ch.17</a>의 배포(infrastructure) 절 참고.
+</div>
+<p>실무 확인: 래퍼의 하트비트 코드를 열어 세 가지를 대조해보라 — ① 주기가 인프라의 유휴 타임아웃(보통 60초)보다 짧은가 ② 죽음 판정 후 §7.2.3 백오프로 진입하는가 ③ 하트비트 메시지가 서버의 프로토콜 ping과 역할이 겹치고 있지는 않은가.</p>
+
+<footer>
+<p>참고 문서: <a href="../reference/frame-cheatsheet.html">프레임 치트시트</a> · <a href="../reference/close-codes-cheatsheet.html">close code 치트시트</a> · <a href="../reference/glossary.html">용어집</a></p>
+<p>궁금한 점이 있으면 언제든 에이전트(선생님)에게 후속 질문을 하세요 — "브라우저는 왜 ping API를 안 주는지" 같은 질문 환영.</p>
+<nav class="lesson-nav"><a href="0003-closing-handshake-close-codes.html">← 레슨 3: 종료 핸드셰이크</a><span>다음 레슨 (예정): HTTP/2·3 위의 WebSocket</span></nav>
+</footer>
+
+<script src="../assets/quiz.js"></script>
+<script>
+renderQuiz('quiz1', [
+  {
+    stem: '서버가 보낸 프로토콜 ping에 대한 pong 응답은 누가 처리하는가?',
+    choices: [
+      '브라우저가 프레임 층에서 자동으로',
+      'onmessage 핸들러가 수신하여 직접',
+      '개발자가 pong 전용 API를 호출해서',
+      '운영체제의 TCP 스택이 대신 응답'
+    ],
+    answer: 0,
+    why: 'ping/pong은 JS에 노출되지 않는 브라우저 내부 동작이다. onmessage는 데이터 프레임에만 발화한다.'
+  },
+  {
+    stem: '응답 Pong의 Application data에 대한 규칙은?',
+    choices: [
+      '응답 대상 Ping의 것과 동일해야 한다',
+      '항상 빈 페이로드로 보내야만 한다',
+      '매번 새로운 무작위 값이어야 한다',
+      '전송 시각 타임스탬프를 담아야 한다'
+    ],
+    answer: 0,
+    why: '페이로드 메아리(echo)가 MUST다 — 어느 ping에 대한 응답인지 대조하고 RTT를 잴 수 있는 장치다 (§5.5.3).'
+  },
+  {
+    stem: 'Pong을 못 보낸 사이 Ping이 여러 개 쌓였다면?',
+    choices: [
+      '가장 최근 것에만 응답해도 된다',
+      '받은 순서대로 전부 응답해야 한다',
+      '프로토콜 오류로 연결을 끊어야 한다',
+      '쌓인 개수를 담아 한 번에 알린다'
+    ],
+    answer: 0,
+    why: 'MAY 규정 — 목적이 "살아있음 확인"이므로 최신 하나에 대한 응답이면 충분하다 (§5.5.3).'
+  },
+  {
+    stem: 'keepalive가 근본적으로 필요한 이유는?',
+    choices: [
+      '침묵하는 TCP는 죽음을 알리지 않아서',
+      '프레임 헤더에 유효 기간이 있어서',
+      '서버가 유휴 메모리를 정리해야 해서',
+      'TLS 세션이 주기적으로 만료되어서'
+    ],
+    answer: 0,
+    why: '트래픽 없는 TCP에서 유휴와 죽음(half-open)은 구분 불가능하고, 중간 장비는 유휴 연결을 잘라버린다. 트래픽을 만들어야만 둘 다 해결된다.'
+  }
+]);
+
+let hbTimers = [];
+function hbLog(msg) {
+  const out = document.getElementById('hb-log');
+  out.textContent += msg + '\n';
+  out.scrollTop = out.scrollHeight;
+}
+function hbClear() { hbTimers.forEach(clearTimeout); hbTimers = []; }
+document.getElementById('hb-start').onclick = () => {
+  const T = parseFloat(document.getElementById('hb-interval').value) * 1000;
+  const W = parseFloat(document.getElementById('hb-timeout').value) * 1000;
+  if (!(T > 0) || !(W > 0)) { hbLog('주기/타임아웃에 양수를 입력하세요.'); return; }
+  hbClear();
+  document.getElementById('hb-log').textContent = '';
+  document.getElementById('hb-start').disabled = true;
+  document.getElementById('hb-cut').disabled = false;
+  document.getElementById('hb-reset').disabled = false;
+  const t0 = performance.now();
+  let cut = null;
+  const stamp = () => ((performance.now() - t0) / 1000).toFixed(1).padStart(5) + 's ';
+  hbLog(stamp() + '연결됨. 하트비트 시작 (주기 ' + T/1000 + 's, 타임아웃 ' + W/1000 + 's)');
+  document.getElementById('hb-cut').onclick = () => {
+    cut = performance.now();
+    hbLog(stamp() + '⚡ 네트워크 절단됨 (양쪽 모두 아직 모른다 — TCP는 침묵할 뿐)');
+    document.getElementById('hb-cut').disabled = true;
+  };
+  function cycle() {
+    hbLog(stamp() + 'ping →');
+    if (cut === null) {
+      hbTimers.push(setTimeout(() => hbLog(stamp() + '   ← pong (생존 확인)'), 120));
+      hbTimers.push(setTimeout(cycle, T));
+    } else {
+      hbTimers.push(setTimeout(() => {
+        hbLog(stamp() + '   … pong 없음. 타임아웃 ' + W/1000 + 's 초과');
+        hbLog(stamp() + '☠ 죽음 판정 — 절단 후 ' + ((performance.now() - cut)/1000).toFixed(1) + 's 만에 감지. close(1006 합성) → §7.2.3 백오프 재연결로');
+      }, W));
+    }
+  }
+  hbTimers.push(setTimeout(cycle, T));
+};
+document.getElementById('hb-reset').onclick = () => {
+  hbClear();
+  document.getElementById('hb-log').textContent = '';
+  document.getElementById('hb-start').disabled = false;
+  document.getElementById('hb-cut').disabled = true;
+  document.getElementById('hb-reset').disabled = true;
+};
+</script>
+</body>
+</html>

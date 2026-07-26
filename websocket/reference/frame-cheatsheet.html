@@ -48,6 +48,8 @@
 <tr><td>컨트롤 프레임</td><td>페이로드 ≤125B, 단편화 금지, 데이터 조각 사이 끼어들기 가능 (§5.5)</td></tr>
 <tr><td>단편화</td><td>첫 조각: FIN=0 + 실제 opcode → 중간: FIN=0 + 0x0 → 마지막: FIN=1 + 0x0 (§5.4)</td></tr>
 <tr><td>브라우저 API</td><td>단편화는 보이지 않음 — onmessage는 조립된 메시지 단위 (DevTools도 메시지 단위)</td></tr>
+<tr><td>ping/pong</td><td>Ping 수신 시 Pong MUST (면제: Close를 이미 받은 경우). 페이로드는 메아리. 밀리면 최신 것만 응답 가능. 자발적 Pong = 단방향 하트비트 (§5.5.2–3)</td></tr>
+<tr><td>브라우저와 ping</td><td>JS에 ping API 없음 — 서버 ping엔 브라우저가 자동 pong. 클라이언트 생존 확인은 앱 수준 하트비트로 (서버는 <code>socket.ping()</code>)</td></tr>
 </table>
 
 <footer>

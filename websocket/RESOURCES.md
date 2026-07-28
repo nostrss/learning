@@ -14,6 +14,8 @@
   HTTP/3 버전. Use for: 최신 전송 계층 위에서의 WebSocket.
 - [논문: "Talking to Yourself for Fun and Profit" — Huang, Chen, Barth, Rescorla, Jackson (W2SP 2011)](https://www.adambarth.com/papers/2011/huang-chen-barth-rescorla-jackson.pdf)
   RFC 6455이 [TALKING]으로 인용하는 프록시 캐시 오염 실증 논문. 마스킹 규칙이 존재하는 이유의 1차 근거. Use for: §10.3 심화, 마스킹 설계 배경.
+- [MDN — Evolution of HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Evolution_of_HTTP)
+  HTTP 1.1→2→3 변천사의 표준 해설. Use for: 버전별 전송 방식 차이, ALPN/Alt-Svc 협상 배경 (레슨 5 배경 절).
 - [High Performance Browser Networking, Ch. 17 WebSocket — Ilya Grigorik (O'Reilly, 무료 공개)](https://hpbn.co/websocket/)
   프로토콜과 성능 관점을 잇는 최고의 해설서. Use for: 프레이밍 오버헤드, 배압, 배포 시 프록시 문제.
 

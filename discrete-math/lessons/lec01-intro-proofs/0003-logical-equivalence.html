@@ -1,0 +1,113 @@
+<meta charset="utf-8">
+<title>레슨 3 — 대우, 역, 그리고 코드 단순화</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script src="../../assets/quiz.js" defer></script>
+
+<h1><span class="lesson-number">6.042J · Lesson 0003 · Lecture 1 · 교재 §1.1.5, 1.2, 1.5</span>대우, 역, 그리고 코드 단순화</h1>
+
+<p class="lede">두 명제의 진리표 열이 완전히 같으면 논리적으로 동치(equivalent)다 — 서로 바꿔 써도 된다는 뜻. 오늘은 implication의 두 변형(대우와 역) 중 어느 쪽이 동치인지 가리고, 같은 기술로 실제 코드 조건문을 단순화한다.</p>
+
+<div class="note">
+<strong>미션 연결.</strong> "테스트가 통과하면 코드는 정상이다"라는 말이 이상하게 들린다면, 그건 당신이 이미 역(converse)의 오류를 직감하고 있다는 뜻이다. 참인 문장은 그 반대 방향인 "코드가 정상이면 테스트는 통과한다"이고, 두 문장은 동치가 아니다. 오늘 그 차이를 진리표로 못 박는다.
+</div>
+
+<h2>1. 대우(contrapositive) — 동치다</h2>
+
+<p>교재의 예: "If I am hungry, then I am grumpy."(배고프면 심술난다) 이 문장과 "If I am not grumpy, then I am not hungry."(심술 안 났으면 배 안 고픈 것)는 같은 말인가?</p>
+
+<p>P = "배고프다", Q = "심술난다"로 놓으면 앞 문장은 P IMPLIES Q, 뒤 문장은 NOT(Q) IMPLIES NOT(P)다. 진리표로 비교:</p>
+
+<table>
+<tr><th>P</th><th>Q</th><th>P IMPLIES Q</th><th>NOT(Q) IMPLIES NOT(P)</th></tr>
+<tr><td>T</td><td>T</td><td>T</td><td>T</td></tr>
+<tr><td>T</td><td>F</td><td>F</td><td>F</td></tr>
+<tr><td>F</td><td>T</td><td>T</td><td>T</td></tr>
+<tr><td>F</td><td>F</td><td>T</td><td>T</td></tr>
+</table>
+
+<p>열이 완전히 일치한다 — <strong>동치</strong>다. NOT(Q) IMPLIES NOT(P)를 P IMPLIES Q의 대우(contrapositive)라 부른다. 같은 말을 두 가지로 쓴 것뿐이므로, 어느 쪽을 증명해도 된다(이게 다음다음 레슨에서 증명 기법이 된다).</p>
+
+<h2>2. 역(converse) — 동치가 아니다</h2>
+
+<p>Q IMPLIES P는 역(converse)이라 부른다: "If I am grumpy, then I am hungry."(심술났으면 배고픈 것) — 다른 주장처럼 들리고, 실제로 다르다:</p>
+
+<table>
+<tr><th>P</th><th>Q</th><th>P IMPLIES Q</th><th>Q IMPLIES P</th></tr>
+<tr><td>T</td><td>T</td><td>T</td><td>T</td></tr>
+<tr><td>T</td><td>F</td><td><strong>F</strong></td><td><strong>T</strong></td></tr>
+<tr><td>F</td><td>T</td><td><strong>T</strong></td><td><strong>F</strong></td></tr>
+<tr><td>F</td><td>F</td><td>T</td><td>T</td></tr>
+</table>
+
+<p>가운데 두 행에서 갈라진다. "코드가 정상이면(P) 테스트는 통과한다(Q)"가 참이어도, 역인 "테스트가 통과하면 코드는 정상이다"는 따라 나오지 않는 이유가 이 표다 — 테스트 통과(Q 참)이면서 버그 있음(P 거짓)인 (ft) 행이 멀쩡히 살아 있다.</p>
+
+<p>마지막 관계 하나: implication과 그 역을 <strong>둘 다</strong> 가지면, 그건 정확히 iff다. (P IMPLIES Q) AND (Q IMPLIES P)의 진리표는 P IFF Q와 일치한다. iff 증명이 왜 항상 "양방향 증명"으로 쪼개지는지가 여기서 나온다.</p>
+
+<h2>3. 같은 기술로 코드 단순화하기</h2>
+
+<p>교재 §1.2의 예제. 이런 조건문이 있다:</p>
+
+<pre><code>if ( x > 0 || (x <= 0 && y > 100) )</code></pre>
+
+<p>A = "x &gt; 0", B = "y &gt; 100"으로 놓으면 조건은 A OR (NOT(A) AND B)다. 진리표를 그려보면:</p>
+
+<table>
+<tr><th>A</th><th>B</th><th>A OR (NOT(A) AND B)</th><th>A OR B</th></tr>
+<tr><td>T</td><td>T</td><td>T</td><td>T</td></tr>
+<tr><td>T</td><td>F</td><td>T</td><td>T</td></tr>
+<tr><td>F</td><td>T</td><td>T</td><td>T</td></tr>
+<tr><td>F</td><td>F</td><td>F</td><td>F</td></tr>
+</table>
+
+<p>동치다. 따라서 동작을 전혀 바꾸지 않고 이렇게 쓸 수 있다:</p>
+
+<pre><code>if ( x > 0 || y > 100 )</code></pre>
+
+<p>리팩터링할 때 "이 조건 줄여도 되나?"의 정답 판정법이 진리표다. 변수가 2~3개면 손으로 다 그릴 수 있다. 칩 설계자도 같은 일을 한다 — 조건식 대신 물리적 게이트 수를 줄이는 것이고, 게이트가 적은 칩은 더 작고 싸고 전력을 덜 먹는다.</p>
+
+<h2>4. 짧은 노트: SAT와 P vs NP</h2>
+
+<p>어떤 조건식을 참으로 만드는 변수 조합이 존재하는가 — 이 판정 문제를 SAT(satisfiability)라 한다. 진리표로 풀면 변수 n개에 2ⁿ행: 변수 30개면 10억 행이 넘는다. 지수 시간이 아닌 다항 시간 해법이 존재하는지는 <strong>아무도 모른다</strong> — 이것이 이론 CS 최대의 미해결 문제 P vs NP다. 풀면 Clay 연구소가 100만 달러를 준다. 명제 논리를 배우는 첫 챕터에서 이미 분야 최전선의 문제와 만난 셈이다.</p>
+
+<h2>확인 퀴즈</h2>
+<p>기억에서 꺼내보자. 틀려도 좋다 — 꺼내려는 시도 자체가 학습이다.</p>
+<div class="quiz" id="quiz1"></div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  renderQuiz('quiz1', [
+    {
+      stem: '"P IMPLIES Q"와 동치인 것은?',
+      choices: ['NOT(Q) IMPLIES NOT(P)', 'Q IMPLIES P', 'NOT(P) IMPLIES NOT(Q)', 'P IFF Q'],
+      answer: 0,
+      why: '대우(contrapositive)만 동치다. 역(Q IMPLIES P)과 이(NOT(P) IMPLIES NOT(Q))는 진리표가 다르다.'
+    },
+    {
+      stem: '"코드가 정상이면 테스트는 통과한다"가 참일 때, 테스트가 통과했다. 코드에 대해 말할 수 있는 것은?',
+      choices: ['아무것도 확정할 수 없다', '코드는 정상이다', '코드는 버그가 있다', '테스트가 잘못됐다'],
+      answer: 0,
+      why: '역의 오류. Q(테스트 통과)가 참이어도 P IMPLIES Q에서 P를 끌어낼 수 없다 — (ft) 행이 존재한다. 대우를 쓰려면 "테스트 실패 → 코드 비정상" 방향이어야 한다.'
+    },
+    {
+      stem: '두 조건식이 동치임을 확정하는 방법은?',
+      choices: ['모든 변수 조합에서 진리표 열이 일치함을 확인', '입력 몇 개를 넣어 같은 결과가 나오는지 확인', '코드 리뷰에서 두 명이 승인', '실행 시간이 같은지 측정'],
+      answer: 0,
+      why: '동치의 정의 자체가 "모든 조합에서 진위가 같다"이다. 예시 몇 개 확인은 레슨 1의 교훈 그대로 — 증명이 아니다.'
+    }
+  ]);
+});
+</script>
+
+<h2>Primary source</h2>
+<ul>
+<li><strong>교재</strong>: <a href="../../../data/6.042j-fall-2010/static_resources/7853d585044ef21bce5f48ce5fc89d28_MIT6_042JF10_chap01.pdf">Chapter 1 (PDF, 로컬)</a> — §1.1.5 (Logically Equivalent Implications), §1.2 (Propositional Logic in Computer Programs), §1.5 (Satisfiability).</li>
+</ul>
+
+<nav class="lesson-nav">
+<a href="0002-truth-tables.html">← 이전: 논리 연산자와 진리표</a>
+<a href="0004-predicates-quantifiers.html">다음: 술어와 한정사 →</a>
+</nav>
+
+<footer>
+용어는 <a href="../../reference/glossary.html">용어집</a>에 정리되어 있다. 읽다가 막히는 문장, 이해 안 되는 개념은 무엇이든 에이전트(Claude)에게 물어볼 것 — 질문에서 나온 내용은 레슨에 다시 반영된다.
+<br>출처: MIT OCW 6.042J Fall 2010, Lehman·Leighton·Meyer, <em>Mathematics for Computer Science</em> (CC BY-NC-SA).
+</footer>

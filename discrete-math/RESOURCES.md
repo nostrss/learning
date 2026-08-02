@@ -1,6 +1,6 @@
 # Resources
 
-베이스: `../mit/6.042j-fall-2010/` — MIT OCW 6.042J Mathematics for Computer Science, Fall 2010 (Tom Leighton, Marten van Dijk) 전체 다운로드본. 라이선스 CC BY-NC-SA.
+베이스: `../data/6.042j-fall-2010/` — MIT OCW 6.042J Mathematics for Computer Science, Fall 2010 (Tom Leighton, Marten van Dijk) 전체 다운로드본. 라이선스 CC BY-NC-SA.
 
 ## 핵심 자료 (로컬)
 

@@ -1,0 +1,111 @@
+<meta charset="utf-8">
+<title>레슨 4 — 술어와 한정사: ∀와 ∃</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script src="../../assets/quiz.js" defer></script>
+
+<h1><span class="lesson-number">6.042J · Lesson 0004 · Lecture 1 · 교재 §1.3</span>술어와 한정사: ∀와 ∃</h1>
+
+<p class="lede">레슨 1에서 "x + 1 = 3"은 명제가 아니라고 했다 — x에 따라 진위가 달라지니까. 오늘 그 문장에 이름을 붙인다: 술어(predicate). 그리고 술어를 명제로 바꾸는 두 개의 장치, ∀(for all)와 ∃(there exists)를 배운다. 수학 문장의 뼈대가 이 둘이다.</p>
+
+<div class="note">
+<strong>미션 연결.</strong> 술어는 boolean을 반환하는 함수, ∀는 <code>every()</code>, ∃는 <code>some()</code>이다. 알고리즘 책의 "for all n ≥ n₀, f(n) ≤ c·g(n)" 같은 문장(빅오의 정의다)을 읽으려면 이 기호들이 자동으로 해석돼야 한다. 오늘이 그 자동화의 시작.
+</div>
+
+<h2>1. 술어(predicate)</h2>
+
+<p>술어란 변수 값에 따라 진위가 결정되는 명제다. 함수처럼 이름 붙여 쓴다:</p>
+
+<pre><code>P(n) ::= "n is a perfect square"</code></pre>
+
+<p>P(4)는 참(4 = 2²), P(5)는 거짓. (기호 <code>::=</code>는 "정의상 같음"이다.) 코드로는 정확히 이것:</p>
+
+<pre><code>const isPerfectSquare = (n) => Number.isInteger(Math.sqrt(n));</code></pre>
+
+<p>주의 하나: 술어 P(n)은 <strong>진위값</strong>을 내고, 보통 함수 p(n) = n² + n은 <strong>수치값</strong>을 낸다. 표기가 닮아서 헷갈리기 쉽다 — 교재도 "Don't confuse these two!"라고 굵게 경고한다.</p>
+
+<h2>2. 두 개의 한정사(quantifier)</h2>
+
+<p>술어에 대해 흔히 하는 주장은 두 가지다: <em>항상</em> 참이다, <em>어떤 값에서는</em> 참이다.</p>
+
+<table>
+<tr><th>기호</th><th>읽기</th><th>뜻</th><th>코드 대응</th></tr>
+<tr><td>∀x ∈ D. P(x)</td><td>for all — 모든 x에 대해</td><td>universally quantified</td><td><code>domain.every(p)</code></td></tr>
+<tr><td>∃x ∈ D. P(x)</td><td>there exists — 어떤 x가 존재</td><td>existentially quantified</td><td><code>domain.some(p)</code></td></tr>
+</table>
+
+<p>∀는 뒤집힌 A(<strong>A</strong>ll), ∃는 뒤집힌 E(<strong>E</strong>xists). ∈는 "…의 원소"이고, ℕ은 음이 아닌 정수 {0, 1, 2, …}, ℤ는 정수 전체, ℝ은 실수다. 레슨 1의 소수 명제를 이 표기로 다시 쓰면:</p>
+
+<pre><code>∀n ∈ ℕ. p(n) is prime        (거짓이었다 — n = 40이 반례)</code></pre>
+
+<h2>3. 한정사의 순서가 뜻을 바꾼다</h2>
+
+<p>교재의 예: "Every American has a dream." 애매한 문장이다. H(a, d) = "미국인 a는 꿈 d를 가진다"로 놓으면 두 해석이 갈라진다:</p>
+
+<table>
+<tr><th>수식</th><th>뜻</th></tr>
+<tr><td>∃d. ∀a. H(a, d)</td><td>모두가 공유하는 <strong>단 하나의</strong> 꿈이 존재한다</td></tr>
+<tr><td>∀a. ∃d. H(a, d)</td><td>각자 <strong>자기만의</strong> 꿈이 있다 (사람마다 달라도 됨)</td></tr>
+</table>
+
+<p>Goldbach 추측으로도 확인: ∀n ∈ Evens. ∃p, q ∈ Primes. n = p + q ("모든 짝수는 어떤 두 소수의 합")는 미해결 추측이지만, 순서를 바꾼 ∃p, q. ∀n. n = p + q ("모든 짝수가 <em>같은</em> 두 소수의 합")는 명백히 거짓이다.</p>
+
+<div class="note">
+<strong>개발자 번역.</strong> 중첩 루프의 순서와 같다. ∀a. ∃d는 "각 a마다 안쪽에서 자기 d를 찾으면 됨"(a마다 달라도 OK), ∃d. ∀a는 "바깥에서 d 하나를 고정한 뒤 모든 a를 통과해야 함". 바깥 변수는 안쪽에 의존할 수 없다 — 클로저 변수 캡처 순서와 같은 감각이다.
+</div>
+
+<h2>4. 한정사의 부정 — NOT을 통과시키면 종류가 바뀐다</h2>
+
+<blockquote>
+NOT(∀x. P(x)) is equivalent to ∃x. NOT(P(x)).
+<cite>— <em>Mathematics for Computer Science</em>, §1.3.8 · 번역: "모두 P다"의 부정은 "P가 아닌 것이 존재한다"이다.</cite>
+</blockquote>
+
+<p>"모두가 스노보드를 좋아하는 건 아니다" = "스노보드를 안 좋아하는 사람이 존재한다". 대칭으로 NOT(∃x. P(x)) IFF ∀x. NOT(P(x))도 성립한다. 일반 원리: <strong>NOT이 한정사를 넘어갈 때마다 ∀↔∃가 뒤바뀐다.</strong></p>
+
+<pre><code>!arr.every(p)  ===  arr.some(x => !p(x))
+!arr.some(p)   ===  arr.every(x => !p(x))</code></pre>
+
+<p>이게 레슨 1의 반례(counterexample)가 작동하는 원리다: ∀ 주장을 무너뜨리는 데 반례 <em>하나의 존재</em>(∃)면 충분한 이유가 이 동치에 들어 있다.</p>
+
+<h2>확인 퀴즈</h2>
+<p>기억에서 꺼내보자. 틀려도 좋다 — 꺼내려는 시도 자체가 학습이다.</p>
+<div class="quiz" id="quiz1"></div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  renderQuiz('quiz1', [
+    {
+      stem: '∃d. ∀a. H(a, d)와 ∀a. ∃d. H(a, d)의 관계는?',
+      choices: ['뜻이 다르다 — 앞은 공유된 하나의 d, 뒤는 각자의 d', '항상 동치다', '앞이 뒤보다 약한 주장이다', '둘 다 같은 코드 every()로 번역된다'],
+      answer: 0,
+      why: '한정사 순서가 뜻을 바꾼다. ∃∀(하나가 모두를 커버)가 ∀∃(각자 하나씩)보다 강한 주장이다 — 강한 쪽에서 약한 쪽으로는 함의가 성립하지만 역은 아니다.'
+    },
+    {
+      stem: 'NOT(∀x. P(x))와 동치인 것은?',
+      choices: ['∃x. NOT(P(x))', '∀x. NOT(P(x))', 'NOT(∃x. P(x))', '∃x. P(x)'],
+      answer: 0,
+      why: 'NOT이 한정사를 넘어가면 종류가 바뀐다. "모두 P다"의 부정은 "모두 P가 아니다"가 아니라 "P 아닌 것이 하나는 있다"이다.'
+    },
+    {
+      stem: '술어(predicate)와 보통 함수의 차이는?',
+      choices: ['술어는 진위값, 함수는 수치값을 낸다', '술어는 변수가 없다', '함수는 수학에만, 술어는 코드에만 있다', '차이가 없다'],
+      answer: 0,
+      why: 'P(n) = "n is a perfect square"는 T/F를 내고, p(n) = n² + n은 숫자를 낸다. 표기가 닮아 교재도 혼동을 경고한다.'
+    }
+  ]);
+});
+</script>
+
+<h2>Primary source</h2>
+<ul>
+<li><strong>교재</strong>: <a href="../../../data/6.042j-fall-2010/static_resources/7853d585044ef21bce5f48ce5fc89d28_MIT6_042JF10_chap01.pdf">Chapter 1 (PDF, 로컬)</a> — §1.3 (Predicates and Quantifiers). §1.3.6 (Order of Quantifiers)의 "Every American has a dream" 문단을 원문으로 읽어보는 것이 오늘의 원문 연습.</li>
+</ul>
+
+<nav class="lesson-nav">
+<a href="0003-logical-equivalence.html">← 이전: 대우, 역, 그리고 코드 단순화</a>
+<a href="0005-axioms-and-implications.html">다음: 공리, 추론 규칙, 그리고 첫 증명 →</a>
+</nav>
+
+<footer>
+용어는 <a href="../../reference/glossary.html">용어집</a>에 정리되어 있다. 읽다가 막히는 문장, 이해 안 되는 개념은 무엇이든 에이전트(Claude)에게 물어볼 것 — 질문에서 나온 내용은 레슨에 다시 반영된다.
+<br>출처: MIT OCW 6.042J Fall 2010, Lehman·Leighton·Meyer, <em>Mathematics for Computer Science</em> (CC BY-NC-SA).
+</footer>

@@ -1,0 +1,138 @@
+<meta charset="utf-8">
+<title>레슨 2 — 논리 연산자와 진리표</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script src="../../assets/quiz.js" defer></script>
+
+<h1><span class="lesson-number">6.042J · Lesson 0002 · Lecture 1 · 교재 §1.1</span>논리 연산자와 진리표</h1>
+
+<p class="lede">일상 언어는 애매하다. 수학은 명제를 조합하는 단어들 — NOT, AND, OR, IMPLIES — 에 진리표(truth table)로 정확한 정의를 박아 넣는다. 오늘은 그 정의들을 하나씩 확인한다.</p>
+
+<div class="note">
+<strong>미션 연결.</strong> 이 진리표들은 이미 매일 쓰고 있다: <code>!</code>, <code>&amp;&amp;</code>, <code>||</code>가 정확히 NOT, AND, OR다. 새로 배우는 건 하나 — <strong>IMPLIES</strong>. 코드에는 연산자가 없지만, "입력이 유효하면 출력은 정렬되어 있다" 같은 스펙 문장이 전부 IMPLIES이고, 이 연산자의 정의가 직관과 어긋나는 지점이 수학 문장을 오독하는 첫 번째 함정이다.
+</div>
+
+<h2>1. Boolean 변수</h2>
+
+<p>이제 명제의 내용("모든 인간은 죽는다")은 잠시 잊고, 명제들이 <em>어떻게 조합되는지</em>만 본다. 그래서 명제를 변수 P, Q로 대신 쓴다. 이 변수들은 T(참) 또는 F(거짓)만 가질 수 있다 — 발명자 George Boole의 이름을 따 Boolean variable이라 부른다. (<code>boolean</code> 타입의 그 Boole이다.)</p>
+
+<h2>2. NOT, AND, OR — 아는 것들</h2>
+
+<p>진리표는 변수의 모든 조합에 대해 명제의 진위를 나열한 표다. 예상대로다:</p>
+
+<table>
+<tr><th>P</th><th>Q</th><th>P AND Q</th><th>P OR Q</th><th>P XOR Q</th></tr>
+<tr><td>T</td><td>T</td><td>T</td><td><strong>T</strong></td><td>F</td></tr>
+<tr><td>T</td><td>F</td><td>F</td><td>T</td><td>T</td></tr>
+<tr><td>F</td><td>T</td><td>F</td><td>T</td><td>T</td></tr>
+<tr><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td></tr>
+</table>
+
+<p>한 가지 주의: 수학의 OR는 <strong>둘 다 참이어도 참</strong>이다(첫 행). "케이크를 먹어도 되고, 아이스크림을 먹어도 된다"라고 수학자가 말하면 둘 다 먹어도 된다는 뜻. 둘 중 하나만을 원하면 별도 연산자 XOR(exclusive-or)를 쓴다. 코드의 <code>||</code>도 수학 OR와 같은 포함적(inclusive) 정의다.</p>
+
+<h2>3. IMPLIES — 가장 직관에 어긋나는 연산자</h2>
+
+<p>교재의 정의:</p>
+
+<table>
+<tr><th>P</th><th>Q</th><th>P IMPLIES Q</th><th></th></tr>
+<tr><td>T</td><td>T</td><td>T</td><td>(tt)</td></tr>
+<tr><td>T</td><td>F</td><td><strong>F</strong></td><td>(tf)</td></tr>
+<tr><td>F</td><td>T</td><td><strong>T</strong></td><td>(ft)</td></tr>
+<tr><td>F</td><td>F</td><td><strong>T</strong></td><td>(ff)</td></tr>
+</table>
+
+<p>거짓인 행이 단 하나 — P가 참인데 Q가 거짓일 때뿐이다. 교재가 외우라고 강조하는 한 문장:</p>
+
+<blockquote>
+An implication is true exactly when the if-part is false or the then-part is true.
+<cite>— <em>Mathematics for Computer Science</em>, §1.1.2 · 번역: implication은 if-부분이 거짓이거나 then-부분이 참일 때, 정확히 그때 참이다.</cite>
+</blockquote>
+
+<p>이상하게 느껴지는 건 (ft)와 (ff) 행이다. 교재의 예:</p>
+
+<p><em>"If pigs can fly, then you can understand the Chebyshev bound."</em> — 돼지는 날 수 없으므로 P는 거짓. 그럼 당신이 Chebyshev bound를 이해하든 못 하든 이 명제는 <strong>참</strong>이다(ft 또는 ff 행). 전제가 거짓이면 전체는 자동으로 참 — 이걸 공허하게 참(vacuously true)이라 한다.</p>
+
+<div class="note">
+<strong>개발자 번역.</strong> 스펙 "입력이 유효하면(P) 출력은 정렬되어 있다(Q)"를 생각하자. 유효하지 않은 입력을 넣었더니 이상한 출력이 나왔다 — 스펙 위반인가? 아니다. P가 거짓이므로 스펙은 여전히 지켜지고 있다(공허하게 참). implication이 <em>깨지는</em> 경우는 단 하나: 유효한 입력(P 참)에 정렬 안 된 출력(Q 거짓)이 나올 때. 테스트로 스펙 위반을 잡으려면 (tf) 행을 노려야 한다는 뜻이다.
+</div>
+
+<p>반대로 거짓인 implication의 예: <em>"If the moon shines white, then the moon is made of white cheddar."</em> 달은 희게 빛나고(P 참) 달은 치즈가 아니므로(Q 거짓), (tf) 행 — 거짓.</p>
+
+<p>흥미로운 활용: "If the Riemann Hypothesis is true, then x² ≥ 0 for every real number x." Riemann 가설의 진위는 아무도 모르지만, <strong>결론 Q가 확실히 참</strong>이므로 (tt) 아니면 (ft) 행 — 어느 쪽이든 전체는 참이다. 전제를 몰라도 판정이 끝난다.</p>
+
+<h2>4. IFF — 논리적 동치</h2>
+
+<p>"P if and only if Q"(줄여서 iff)는 P와 Q의 진위가 <strong>같다</strong>는 주장이다: 둘 다 참이거나, 둘 다 거짓이거나.</p>
+
+<table>
+<tr><th>P</th><th>Q</th><th>P IFF Q</th></tr>
+<tr><td>T</td><td>T</td><td>T</td></tr>
+<tr><td>T</td><td>F</td><td>F</td></tr>
+<tr><td>F</td><td>T</td><td>F</td></tr>
+<tr><td>F</td><td>F</td><td><strong>T</strong></td></tr>
+</table>
+
+<p>예: 모든 실수 x에 대해 "x² − 4 ≥ 0 iff |x| ≥ 2"는 참이다. 어떤 x에서는 양쪽 다 참이고, 다른 x에서는 양쪽 다 거짓이지만 — 항상 <em>같이</em> 움직이므로 iff 전체는 항상 참.</p>
+
+<h2>5. 기호 표기</h2>
+
+<table>
+<tr><th>영어</th><th>기호</th><th>코드</th></tr>
+<tr><td>NOT(P)</td><td>¬P</td><td><code>!p</code></td></tr>
+<tr><td>P AND Q</td><td>P ∧ Q</td><td><code>p &amp;&amp; q</code></td></tr>
+<tr><td>P OR Q</td><td>P ∨ Q</td><td><code>p || q</code></td></tr>
+<tr><td>P IMPLIES Q</td><td>P → Q</td><td><code>!p || q</code></td></tr>
+<tr><td>P IFF Q</td><td>P ↔ Q</td><td><code>p === q</code></td></tr>
+</table>
+
+<p>교재는 기호보다 단어(AND, IMPLIES)를 주로 쓴다 — 우리도 그렇게 한다. 표의 코드 열을 보면 IMPLIES가 <code>!p || q</code>와 같음을 진리표로 직접 확인할 수 있다. "if-부분이 거짓이거나 then-부분이 참"이라는 그 문장 그대로다.</p>
+
+<h2>확인 퀴즈</h2>
+<p>기억에서 꺼내보자. 틀려도 좋다 — 꺼내려는 시도 자체가 학습이다.</p>
+<div class="quiz" id="quiz1"></div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  renderQuiz('quiz1', [
+    {
+      stem: '"P IMPLIES Q"가 거짓이 되는 경우는?',
+      choices: ['P 참, Q 거짓일 때뿐', 'P 거짓, Q 참일 때뿐', 'P와 Q가 다를 때 항상', 'P가 거짓일 때 항상'],
+      answer: 0,
+      why: '진리표에서 F인 행은 (tf) 하나뿐이다. P가 거짓이면 Q와 무관하게 전체는 참(공허하게 참)이다.'
+    },
+    {
+      stem: '"If pigs can fly, then you can understand the Chebyshev bound."의 진위는?',
+      choices: ['참 — 전제가 거짓이므로', '거짓 — 돼지는 날 수 없으므로', 'Chebyshev bound를 이해하는지에 달렸다', '진위 미확정 — 명제가 아니다'],
+      answer: 0,
+      why: '돼지는 날 수 없으므로 P는 거짓, 따라서 (ft) 또는 (ff) 행 — 어느 쪽이든 참이다. 결론의 진위는 판정에 아무 영향이 없다.'
+    },
+    {
+      stem: '수학의 "P OR Q"에 대해 옳은 것은?',
+      choices: ['P와 Q가 둘 다 참이어도 참이다', 'P와 Q 중 정확히 하나만 참일 때 참이다', '일상 언어의 "또는"과 항상 같다', 'P가 참이면 거짓이다'],
+      answer: 0,
+      why: '수학의 OR는 포함적(inclusive)이다. 배타적 선택은 XOR라는 별도 연산자를 쓴다.'
+    },
+    {
+      stem: 'IMPLIES를 코드로 옮기면?',
+      choices: ['!p || q', 'p && q', 'p || !q', 'p === q'],
+      answer: 0,
+      why: '"if-부분이 거짓이거나(!p) then-부분이 참(q)일 때 참" — 진리표를 비교하면 열이 정확히 일치한다.'
+    }
+  ]);
+});
+</script>
+
+<h2>Primary source</h2>
+<ul>
+<li><strong>교재</strong>: <a href="../../../data/6.042j-fall-2010/static_resources/7853d585044ef21bce5f48ce5fc89d28_MIT6_042JF10_chap01.pdf">Chapter 1 (PDF, 로컬)</a> — §1.1 (Compound Propositions). 위 인용 문장 "An implication is true exactly when…"을 원문에서 찾아보는 것이 오늘의 원문 연습.</li>
+<li>보조: <a href="https://www.youtube.com/watch?v=L3LMbpZIKhQ">Lecture 1 비디오</a> — 강의는 증명 쪽에 집중하므로, 이 레슨 범위는 교재가 주 채널이다.</li>
+</ul>
+
+<nav class="lesson-nav">
+<a href="0001-propositions.html">← 이전: 명제, 그리고 예시는 왜 증명이 아닌가</a>
+<a href="0003-logical-equivalence.html">다음: 대우, 역, 그리고 코드 단순화 →</a>
+</nav>
+
+<footer>
+용어는 <a href="../../reference/glossary.html">용어집</a>에 정리되어 있다. 읽다가 막히는 문장, 이해 안 되는 개념은 무엇이든 에이전트(Claude)에게 물어볼 것 — 질문에서 나온 내용은 레슨에 다시 반영된다.
+<br>출처: MIT OCW 6.042J Fall 2010, Lehman·Leighton·Meyer, <em>Mathematics for Computer Science</em> (CC BY-NC-SA).
+</footer>

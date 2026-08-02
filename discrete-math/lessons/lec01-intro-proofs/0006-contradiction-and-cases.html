@@ -1,0 +1,125 @@
+<meta charset="utf-8">
+<title>레슨 6 — 모순 증명과 케이스 증명</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<script src="../../assets/quiz.js" defer></script>
+
+<h1><span class="lesson-number">6.042J · Lesson 0006 · Lecture 1 · 교재 §2.5, 2.2, 2.7</span>모순 증명과 케이스 증명</h1>
+
+<p class="lede">Lecture 1의 클라이맥스. 수학사에서 가장 유명한 증명 중 하나인 "√2는 무리수다"를 모순 증명(proof by contradiction)으로 완주하고, 케이스 증명(proof by cases)으로 6명만 모이면 반드시 생기는 구조를 확인한다. 이 레슨이 끝나면 Lecture 1이 끝난다.</p>
+
+<div class="note">
+<strong>미션 연결.</strong> 모순 증명은 귀류법 디버깅이다: "이 버그가 캐시 때문이라 <em>가정하면</em>… 캐시를 꺼도 재현되네? 가정이 틀렸다." 명제가 거짓이라 가정하고 논리를 밀어붙여 말이 안 되는 결론에 도달하면, 가정이 무너진다 — 그러므로 명제는 참이다.
+</div>
+
+<h2>1. 모순 증명(proof by contradiction)의 템플릿</h2>
+
+<ol>
+<li>"We use proof by contradiction."이라 쓴다.</li>
+<li>"Suppose P is false."라 쓴다.</li>
+<li>거짓임이 알려진 무언가(논리적 모순)를 유도한다.</li>
+<li>"This is a contradiction. Therefore, P must be true."라 쓴다.</li>
+</ol>
+
+<p>모순 증명은 <em>항상</em> 시도 가능한 만능 접근이지만, 이름대로 논증이 배배 꼬이기 쉬워서 명료함을 위해서는 직접 증명이 일반적으로 선호된다.</p>
+
+<h2>2. √2는 무리수다 (Theorem 2.5.1)</h2>
+
+<p>유리수(rational)는 정수의 비율로 쓸 수 있는 수다: 3.5 = 7/2, 0.111… = 1/9. 무리수(irrational)는 그럴 수 없는 수. 이제 증명:</p>
+
+<blockquote>
+<em>Proof.</em> We use proof by contradiction. Suppose the claim is false; that is, √2 is rational. Then we can write √2 as a fraction n/d in lowest terms. Squaring both sides gives 2 = n²/d² and so 2d² = n². This implies that n is a multiple of 2. Therefore n² must be a multiple of 4. But since 2d² = n², we know 2d² is a multiple of 4 and so d² is a multiple of 2. This implies that d is a multiple of 2. So the numerator and denominator have 2 as a common factor, which contradicts the fact that n/d is in lowest terms. So √2 must be irrational. ■
+<cite>번역: 모순 증명을 쓴다. 주장이 거짓, 즉 √2가 유리수라 가정하자. 그러면 √2를 기약분수 n/d로 쓸 수 있다. 양변을 제곱하면 2 = n²/d², 즉 2d² = n². 그러면 n은 2의 배수이고, 따라서 n²은 4의 배수다. 2d² = n²이므로 2d²도 4의 배수, 즉 d²이 2의 배수이고 따라서 d도 2의 배수다. 분자와 분모가 공약수 2를 가지므로, 기약분수라는 사실과 모순이다. 그러므로 √2는 무리수다.</cite>
+</blockquote>
+
+<p>구조를 뜯어보자. "기약분수(lowest terms)로 잡는다"가 핵심 셋업이다 — 유리수라면 반드시 그렇게 쓸 수 있으니 합법적인 가정이고, 논리를 밀어붙이니 "분자·분모가 둘 다 짝수"라는, 기약분수와 정면 충돌하는 결론이 나왔다. 가정(√2가 유리수)이 무너진다.</p>
+
+<div class="note">
+<strong>함정.</strong> 모순 증명의 중간 결과("n은 2의 배수")는 <strong>거짓 가정 위에 세운 것</strong>이므로 증명이 끝난 뒤 재사용하면 안 된다. 롤백된 트랜잭션 안의 쓰기를 바깥에서 읽으면 안 되는 것과 같다. 여러 lemma가 얽힌 큰 증명에서 특히 조심하라고 교재가 경고하는 부분.
+</div>
+
+<h2>3. 케이스 증명(proof by cases)</h2>
+
+<p>전체를 유한 개의 경우로 쪼개 각각을 증명하면 전체가 증명된다. 사실 이미 써봤다 — 진리표가 정확히 4-케이스 증명이다. 교재의 본격 예제:</p>
+
+<blockquote>
+<strong>Theorem.</strong> Every collection of 6 people includes a club of 3 people or a group of 3 strangers.
+<cite>번역: 6명이 모이면 반드시 서로 전부 아는 3명(club) 또는 서로 전부 모르는 3명(strangers)이 존재한다.</cite>
+</blockquote>
+
+<p>증명 스케치: 한 명 x를 잡는다. 나머지 5명을 "x를 아는 그룹 / 모르는 그룹"으로 나누면 한쪽엔 반드시 3명 이상이 있다(케이스 커버 확인!).</p>
+
+<ul>
+<li><strong>Case 1</strong> — x를 아는 사람이 3명 이상:
+  그들끼리 아무도 모르면 → 그 3명이 strangers ✓. 어떤 쌍이 서로 알면 → 그 쌍 + x가 club ✓.</li>
+<li><strong>Case 2</strong> — x를 모르는 사람이 3명 이상:
+  그들끼리 전부 알면 → 그 3명이 club ✓. 어떤 쌍이 서로 모르면 → 그 쌍 + x가 strangers ✓.</li>
+</ul>
+
+<p>모든 케이스에서 정리가 성립하므로 증명 끝. 케이스 증명의 의무는 두 가지다: 각 케이스를 증명하는 것, 그리고 <strong>케이스들이 전체를 빠짐없이 덮는다는 것</strong>을 보이는 것 — switch문의 exhaustiveness 체크와 같다. (이 정리는 나중에 배울 Ramsey 이론의 가장 작은 사례다.)</p>
+
+<h2>4. 좋은 증명 쓰기 — §2.7에서 세 가지만</h2>
+
+<p>교재의 체크리스트에서 지금 단계에 가장 유용한 셋:</p>
+
+<ul>
+<li><strong>게임 플랜을 먼저 선언하라</strong>: "We use proof by contradiction." — 리더블 코드의 함수 첫 줄 주석과 같다.</li>
+<li><strong>증명은 계산이 아니라 에세이다</strong>: 수식 나열이 아니라 완전한 문장으로. 위의 √2 증명이 좋은 본보기다.</li>
+<li><strong>"obviously"를 경계하라</strong>: 증명하기 어려운 걸 얼버무리는 신호다 — 남의 증명에서 보이면 오히려 긴장할 것.</li>
+</ul>
+
+<p>교재는 증명↔프로그램의 유비로 챕터를 닫는다: 손 흔들며 "대충 되겠지"로 설계한 시스템의 결말로 방사선 치료기 Therac-25 사고를 인용한다. 증명 체력은 크리티컬한 시스템을 만드는 체력이다.</p>
+
+<div class="note">
+<strong>보조 읽기 (선택).</strong> 챕터 2의 §2.6 (Proofs about Sets)은 집합 표기(∪, ∩, ⊆, 여집합, cardinality)와 Russell's Paradox를 다룬다. 이후 강의에서 집합 기호가 나올 때 사전처럼 돌아와 찾아보면 된다 — 지금 다 외울 필요 없음.
+</div>
+
+<h2>확인 퀴즈</h2>
+<p>기억에서 꺼내보자. 틀려도 좋다 — 꺼내려는 시도 자체가 학습이다.</p>
+<div class="quiz" id="quiz1"></div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  renderQuiz('quiz1', [
+    {
+      stem: '√2 무리수 증명에서 "n/d를 기약분수로 잡는다"는 셋업이 하는 역할은?',
+      choices: ['나중에 "공약수 2를 가진다"와 충돌시킬 모순의 표적', '계산을 간단히 하기 위한 편의', '√2가 양수임을 보장', 'n과 d가 소수(prime)임을 보장'],
+      answer: 0,
+      why: '유리수라면 반드시 기약분수로 쓸 수 있다(합법적 가정). 논리를 밀면 n, d가 둘 다 짝수 — 기약분수와 정면 모순이 나면서 가정 전체가 무너진다.'
+    },
+    {
+      stem: '모순 증명이 끝난 뒤, 증명 중간에 유도했던 "n은 2의 배수"를 다른 증명에서 재사용해도 되는가?',
+      choices: ['안 된다 — 거짓 가정 위에서 유도된 결과이므로', '된다 — 한번 증명된 것은 영원히 참이므로', '√2 관련 증명에서만 된다', 'lemma로 승격하면 된다'],
+      answer: 0,
+      why: '모순 증명의 중간 결과는 "√2가 유리수"라는 거짓 가정에서 나온 것이다. 롤백된 트랜잭션의 쓰기와 같다 — 바깥에서 읽으면 안 된다.'
+    },
+    {
+      stem: '케이스 증명에서 각 케이스 증명 외에 반드시 해야 하는 것은?',
+      choices: ['케이스들이 모든 경우를 빠짐없이 덮음을 보이기', '케이스가 정확히 2개임을 보이기', '각 케이스가 서로 배타적임을 보이기', '가장 어려운 케이스부터 증명하기'],
+      answer: 0,
+      why: '커버리지가 안 보이면 증명에 구멍이다. 6명 정리에서도 "5명을 둘로 나누면 한쪽엔 3명 이상"이라는 커버 논증이 먼저 나온다. 케이스 중복은 괜찮다 — 빠짐이 문제다.'
+    },
+    {
+      stem: '6명 정리의 Case 1(x를 아는 사람 3명 이상)에서, 그 3명 중 어떤 쌍이 서로 안다면?',
+      choices: ['그 쌍 + x가 club of 3이 된다', '그 3명이 strangers가 된다', '모순이 발생한다', 'Case 2로 넘어간다'],
+      answer: 0,
+      why: '쌍은 서로 알고, 둘 다 x를 알므로(Case 1의 조건) 세 사람이 전부 서로 아는 club이 완성된다.'
+    }
+  ]);
+});
+</script>
+
+<h2>Primary source</h2>
+<ul>
+<li><strong>비디오</strong>: <a href="https://www.youtube.com/watch?v=L3LMbpZIKhQ">Lecture 1: Introduction and Proofs — Tom Leighton</a> — √2 무리수 증명이 이 강의의 하이라이트다. 교재 증명을 먼저 읽고 강의로 복습하면 부담이 적다.</li>
+<li><strong>교재</strong>: <a href="../../../data/6.042j-fall-2010/static_resources/38ca8d7baeedd6aa476010a0cbd041d0_MIT6_042JF10_chap02.pdf">Chapter 2 (PDF, 로컬)</a> — §2.5 (Proof by Contradiction), §2.2 (Proof by Cases), §2.7 (Good Proofs in Practice).</li>
+<li><strong>연습</strong>: <a href="../../../data/6.042j-fall-2010/static_resources/afcde74688c486d46d3b250326834b04_MIT6_042JF10_rec01.pdf">Recitation 1 문제 (PDF, 로컬)</a> — Lecture 1 전체를 마쳤으니 도전할 때다. 해답(<a href="../../../data/6.042j-fall-2010/static_resources/a48e6fe503bf94a1ac3d78cb659026fc_MIT6_042JF10_rec01_sol.pdf">rec01_sol</a>)은 스스로 시도한 뒤에만.</li>
+</ul>
+
+<nav class="lesson-nav">
+<a href="0005-axioms-and-implications.html">← 이전: 공리, 추론 규칙, 그리고 첫 증명</a>
+<span>다음: Lecture 2 — Induction (예정)</span>
+</nav>
+
+<footer>
+용어는 <a href="../../reference/glossary.html">용어집</a>에 정리되어 있다. 읽다가 막히는 문장, 이해 안 되는 개념은 무엇이든 에이전트(Claude)에게 물어볼 것 — 질문에서 나온 내용은 레슨에 다시 반영된다.
+<br>출처: MIT OCW 6.042J Fall 2010, Lehman·Leighton·Meyer, <em>Mathematics for Computer Science</em> (CC BY-NC-SA).
+</footer>

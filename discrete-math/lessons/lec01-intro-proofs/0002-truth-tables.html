@@ -60,6 +60,25 @@ An implication is true exactly when the if-part is false or the then-part is tru
 
 <p>흥미로운 활용: "If the Riemann Hypothesis is true, then x² ≥ 0 for every real number x." Riemann 가설의 진위는 아무도 모르지만, <strong>결론 Q가 확실히 참</strong>이므로 (tt) 아니면 (ft) 행 — 어느 쪽이든 전체는 참이다. 전제를 몰라도 판정이 끝난다.</p>
 
+<div class="note">
+<strong>Q&amp;A — "IMPLIES를 JavaScript로 설명해달라."</strong> 코드에 연산자가 없어 낯설지만, 함수로 쓰면 한 줄이다:
+<pre><code>const implies = (p, q) => !p || q;
+
+implies(true,  true);   // true   (tt)
+implies(true,  false);  // false  (tf) ← 유일한 거짓
+implies(false, true);   // true   (ft)
+implies(false, false);  // true   (ff)</code></pre>
+왜 <code>!p || q</code>인가? IMPLIES는 <strong>조건부 약속</strong>이다: "비가 오면(P) 우산을 가져간다(Q)". 약속이 깨지는 경우는 비 왔는데 우산 안 가져간 것뿐 — 비가 안 왔으면 뭘 하든 약속 위반이 아니다(공허하게 참).
+<pre><code>const broken = (rain, umbrella) => rain && !umbrella;  // 깨지는 유일한 경우
+// 약속이 지켜짐 = !(p && !q) = !p || q   ← 드모르간 법칙</code></pre>
+실무에서는 이미 guard clause로 쓰고 있다:
+<pre><code>function process(user) {
+  if (!user.isAdmin) return;   // P 거짓 → 공허하게 참, 위반 불가능
+  doAdminThing(user);          // P 참일 때만 Q를 책임진다
+}</code></pre>
+그리고 레슨 3의 예고: <code>implies(p, q)</code>와 <code>implies(q, p)</code>(역)는 다른 명제지만, <code>implies(!q, !p)</code>(대우)는 같은 명제다. "비 오면 우산 챙긴다"가 참이어도 "우산 챙겼으면 비 온다"는 따라 나오지 않는다.
+</div>
+
 <h2>4. IFF — 논리적 동치</h2>
 
 <p>"P if and only if Q"(줄여서 iff)는 P와 Q의 진위가 <strong>같다</strong>는 주장이다: 둘 다 참이거나, 둘 다 거짓이거나.</p>

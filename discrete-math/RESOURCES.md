@@ -10,6 +10,10 @@
 - **Recitation 문제+해답**: `static_resources/*_MIT6_042JF10_recNN(_sol).pdf` — 연습(skill) 단계의 주 재료.
 - **과제**: `*_MIT6_042JF10_assnNN.pdf` (1–12), **시험**: `pages/exams/` — 현재 out of scope.
 
+## 레슨 폴더 구조
+
+`lessons/lecNN-slug/NNNN-topic.html` — 강의(lecture)당 폴더 하나, 레슨 번호(NNNN)는 전체 통산으로 이어감. 폴더는 해당 강의 시작 시점에 생성 (미리 만들지 않음). 예: `lessons/lec01-intro-proofs/0001-propositions.html`.
+
 ## 강의 순서 (공식 캘린더 기준) — 진도표
 
 | # | 주제 | 교재 챕터 | YouTube ID | 상태 |

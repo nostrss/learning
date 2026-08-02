@@ -14,6 +14,8 @@
   HTTP/3 버전. Use for: 최신 전송 계층 위에서의 WebSocket.
 - [논문: "Talking to Yourself for Fun and Profit" — Huang, Chen, Barth, Rescorla, Jackson (W2SP 2011)](https://www.adambarth.com/papers/2011/huang-chen-barth-rescorla-jackson.pdf)
   RFC 6455이 [TALKING]으로 인용하는 프록시 캐시 오염 실증 논문. 마스킹 규칙이 존재하는 이유의 1차 근거. Use for: §10.3 심화, 마스킹 설계 배경.
+- [RFC 7692 — Compression Extensions for WebSocket (2015)](https://datatracker.ietf.org/doc/html/rfc7692)
+  permessage-deflate의 규범 문서. Use for: 확장 협상(§5), RSV1(§6), context takeover와 4개 파라미터(§7), 압축 부채널 경고(§8).
 - [MDN — Evolution of HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Evolution_of_HTTP)
   HTTP 1.1→2→3 변천사의 표준 해설. Use for: 버전별 전송 방식 차이, ALPN/Alt-Svc 협상 배경 (레슨 5 배경 절).
 - [High Performance Browser Networking, Ch. 17 WebSocket — Ilya Grigorik (O'Reilly, 무료 공개)](https://hpbn.co/websocket/)
@@ -25,5 +27,4 @@
 
 ## Gaps
 
-- 압축 확장 (RFC 7692, permessage-deflate) 자료 미수집 — 프레이밍 학습 후 필요
 - 재연결 전략에 대한 규범 문서는 없음 (스펙 밖 영역) — 커뮤니티/실무 자료로 보강 필요

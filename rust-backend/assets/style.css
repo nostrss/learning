@@ -1,0 +1,44 @@
+/* Shared stylesheet for all RUST_BACKEND lessons & references */
+:root{--bg:#fffdf8;--fg:#1b1b1b;--muted:#5f5f5f;--accent:#b7410e;--code-bg:#f3efe7;--ok:#1a7f37;--bad:#b42318;--line:#e3ddd2}
+@media(prefers-color-scheme:dark){:root{--bg:#141412;--fg:#e8e4dc;--muted:#a09a90;--accent:#f0803c;--code-bg:#1f1e1a;--ok:#4ade80;--bad:#f87171;--line:#2d2b26}}
+*{box-sizing:border-box}
+html{font-size:17px}
+body{margin:0;padding:1.25rem 1rem 4rem;background:var(--bg);color:var(--fg);font-family:Georgia,"Apple SD Gothic Neo","Noto Serif KR",serif;line-height:1.65;max-width:42rem;margin-inline:auto}
+h1{font-size:1.9rem;line-height:1.2;margin:.5rem 0 .25rem;font-weight:600}
+h2{font-size:1.25rem;margin:2.25rem 0 .5rem;border-bottom:1px solid var(--line);padding-bottom:.2rem;font-weight:600}
+h3{font-size:1.05rem;margin:1.5rem 0 .4rem;font-weight:600}
+.meta{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
+a{color:var(--accent)}
+p{margin:.6rem 0}
+code{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:.88em;background:var(--code-bg);padding:.1em .3em;border-radius:3px}
+pre{background:var(--code-bg);padding:.9rem 1rem;border-radius:6px;overflow-x:auto;line-height:1.45;font-size:.85rem;border-left:3px solid var(--line)}
+pre code{background:none;padding:0;font-size:inherit}
+pre.err{border-left-color:var(--bad)}
+pre.ok{border-left-color:var(--ok)}
+.side{border-left:3px solid var(--accent);padding:.6rem .9rem;margin:1rem 0;background:var(--code-bg);font-size:.95rem}
+.side b{color:var(--accent)}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:1rem 0}
+@media(max-width:600px){.compare{grid-template-columns:1fr}}
+.compare h4{margin:0 0 .3rem;font-size:.85rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:1rem 0}
+th,td{text-align:left;padding:.45rem .5rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600}
+/* quiz */
+.quiz{border:1px solid var(--line);border-radius:8px;padding:1rem;margin:1.25rem 0}
+.quiz .q{margin:0 0 .6rem;font-weight:600}
+.quiz .opt{display:block;width:100%;text-align:left;font:inherit;font-size:.95rem;padding:.55rem .8rem;margin:.35rem 0;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);cursor:pointer}
+.quiz .opt:hover{border-color:var(--accent)}
+.quiz .opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--bg))}
+.quiz .opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,var(--bg))}
+.quiz .explain{display:none;margin:.7rem 0 0;font-size:.93rem;color:var(--muted)}
+.quiz.done .explain{display:block}
+.quiz.done .opt{cursor:default}
+/* exercise */
+.task{border:2px solid var(--accent);border-radius:8px;padding:1rem 1.1rem;margin:1.5rem 0}
+.task h3{margin-top:0}
+details{margin:.6rem 0}
+summary{cursor:pointer;color:var(--accent)}
+.steps li{margin:.35rem 0}
+.win{background:color-mix(in srgb,var(--ok) 10%,var(--bg));border-left:3px solid var(--ok);padding:.6rem .9rem;margin:1.25rem 0}
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+nav.lessons{font-size:.9rem;color:var(--muted);display:flex;justify-content:space-between;gap:1rem;margin-top:1rem}

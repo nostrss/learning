@@ -126,6 +126,6 @@ fn main() {
 
 **이번 레슨의 승리:** E0382를 보고 "아, 여기서 move됐구나"라고 읽을 수 있게 됐다.
 
-**더 읽기:** [The Rust Book · 4.1 What Is Ownership?](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html) (15분). 치트시트: [reference/ownership.html](../reference/ownership.html)
+**더 읽기:** [The Rust Book · 4.1 What Is Ownership?](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html) (15분). 치트시트: [reference/ownership.md](../reference/ownership.md)
 
 다음: Lesson 2 · Borrowing (`&`) — 소유권을 넘기지 않고 빌려 쓰기. 질문은 `@Ferris`.

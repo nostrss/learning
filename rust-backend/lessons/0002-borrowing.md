@@ -8,6 +8,11 @@
 
 <details><summary>정답</summary>못 쓴다. 튜플 안에 <code>String</code>(힙 소유)이 있으니 튜플 전체가 <code>Copy</code>가 아니고, 통째로 move된다. Copy 튜플은 "Copy 타입만으로" 된 것뿐. (<a href="./0001-ownership-move.md#4-예외-copy-타입은-이동하지-않는다">Lesson 1 · 4절</a>)</details>
 
+> **Q&A (2026-10-11) · 이 문법은 뭔가?**
+> - `(1, String::from("hi"))`는 **튜플**. TS의 `[number, string]` tuple과 같다. 타입은 `(i32, String)`. 접근은 `t.0`, `t.1` (TS `t[0]`), 구조 분해는 `let (n, s) = t;` (TS `const [n, s] = t`).
+> - `String::from(...)`의 `::`는 타입에 붙은 함수(**associated function**) 호출. JS `Array.from(...)` 같은 static 메서드. ([5.3](https://doc.rust-lang.org/book/ch05-03-method-syntax.html#associated-functions))
+> - `"hi"`만 쓰면 타입이 `&str`(고정 문자열을 가리키는 참조). `String::from`은 이를 힙에 복사해 소유하는 `String`을 만든다. `&str`은 Lesson 3에서. ([4.1 · The String Type](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#the-string-type))
+
 ## 1. Lesson 1의 불편함
 
 방법 B는 이랬다:

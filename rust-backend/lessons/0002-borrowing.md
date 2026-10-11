@@ -178,7 +178,7 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
 
 ## 6. 과제 (10분, 직접 타이핑)
 
-1. `cd ~/github/learning/rust-backend/exercises && cargo new rust-02-borrowing && cd rust-02-borrowing`
+1. `cd ~/github/learning/rust-backend && mkdir -p exercises && cd exercises && cargo new rust-02-borrowing && cd rust-02-borrowing`
 2. Lesson 1의 `shout`를 **`&String`을 받도록** 고쳐서 `JINTAGI` 다음 줄 `jintagi`가 출력되게. 튜플 반환, `.clone()` 금지.
 3. `add_suffix(name: &mut String)`를 추가하고 `main`에서 호출해 `jintagi님`을 출력.
 4. 일부러 4절의 E0502 코드를 쳐서 에러를 보고, **줄 순서만 바꿔서** 통과시키기. 결과는 `hello` 다음 줄 `hello!`.

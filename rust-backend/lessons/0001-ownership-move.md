@@ -1,34 +1,84 @@
 # Lesson 1 · Ownership: 값의 주인은 한 명
 
-약 15분 · 목표: `let b = a;` 한 줄이 TypeScript와 Rust에서 왜 다른 뜻인지 설명하고, `E0382` 에러를 직접 만들고 직접 고친다.
+⏱ 약 15분 · 🎯 `let b = a;` 한 줄이 TS와 Rust에서 왜 다른 뜻인지 말로 설명하고, `E0382` 에러를 직접 만들고 직접 고친다.
 
-## 1. 네가 이미 아는 것 (TypeScript)
+---
+
+## 0. 이 레슨에서 처음 보는 문법
+
+읽다가 막히면 여기로 돌아오세요.
+
+| Rust | 뜻 | TS로 치면 |
+|---|---|---|
+| `let a = 5;` | 변수 선언. 기본은 **수정 불가** | `const a = 5;` |
+| `let a: i32 = 5;` | `: i32`는 타입 표기. `i32` = 32비트 정수 | `let a: number = 5;` |
+| `String::from("hi")` | 힙에 문자열을 만드는 함수. `::`는 "타입에 붙은 함수" | `Array.from(...)` 같은 static 메서드 |
+| `"hi"` | 프로그램에 박힌 고정 문자열(`&str`). `String`과 다른 타입 | (TS엔 구분 없음) |
+| `fn f(x: String) -> String { ... }` | 함수. 파라미터 타입과 반환 타입 표기 | `function f(x: string): string { ... }` |
+| `println!("{a}")` | 출력. `{a}` 자리에 변수 값 | `` console.log(`${a}`) `` |
+| `(1, String::from("hi"))` | 튜플. `t.0`, `t.1`로 꺼냄 | `[1, "hi"]` (`[number, string]`) |
+
+숫자 타입 전체 목록은 [치트시트](../reference/ownership.md)에.
+
+---
+
+## 1. 네가 이미 아는 것: TS는 "같이 가리키기"
+
+```mermaid
+flowchart LR
+  a["const a"] --> obj["{ name: 'jintagi' }"]
+  b["const b"] --> obj
+```
+
+- `const b = a;` 하면 객체는 **하나**, 가리키는 화살표만 둘.
+- 누가 "주인"인지 아무도 신경 안 쓴다.
+- 화살표가 전부 사라지면 GC(가비지 컬렉터)가 언젠가 치운다.
 
 ```ts
 const a = { name: "jintagi" };
-const b = a;      // 같은 객체를 가리킴
+const b = a;
 b.name = "ferris";
-console.log(a.name); // "ferris"
+console.log(a.name); // "ferris" ← 같은 객체니까
 ```
 
-힙에 객체 하나, 그걸 가리키는 참조가 둘. 누가 "주인"인지 아무도 신경 안 쓴다. 참조가 다 사라지면 GC가 언젠가 치운다.
+---
 
-## 2. Rust의 규칙 세 줄
+## 2. Rust엔 GC가 없다 → 규칙 세 줄
 
-[Rust Book 4.1 · Ownership Rules](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#ownership-rules)
+> 1. 모든 값에는 **주인(owner)** 변수가 있다.
+> 2. 주인은 한 번에 **한 명**뿐이다.
+> 3. 주인이 scope(`{ }` 블록)를 벗어나면 값은 **치워진다(drop)**.
+>
+> 출처: [Rust Book 4.1 · Ownership Rules](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#ownership-rules)
 
-1. Rust의 모든 값에는 **owner**가 있다.
-2. owner는 한 번에 **하나**뿐이다.
-3. owner가 scope를 벗어나면 값은 **drop**(해제)된다.
+- 3번이 GC 대신 메모리를 치우는 방법이다. "주인이 떠나면 같이 치운다."
+- 그런데 주인이 둘이면? 둘 다 떠날 때 **같은 메모리를 두 번 치운다**(double free). 프로그램이 망가진다.
+- 그래서 2번 규칙이 있다. 주인은 무조건 한 명.
 
-> **GC가 없다는 뜻.** 3번 규칙이 메모리 해제의 전부다. 주인이 둘이면 두 번 해제(double free)가 생기므로 2번 규칙이 필요하다.
+---
 
-## 3. 그래서 `let s2 = s1;`은 이동(move)이다
+## 3. 그래서 `let s2 = s1;`은 "주인 바꾸기"(move)다
+
+```mermaid
+flowchart LR
+  subgraph before["① let s1 = String::from('hello')"]
+    s1a["s1 (주인)"] --> h1["힙: hello"]
+  end
+  subgraph after["② let s2 = s1"]
+    s1b["s1 ❌ 무효"]
+    s2b["s2 (주인)"] --> h2["힙: hello"]
+  end
+  before --> after
+```
+
+- `hello`는 그대로 하나. **주인만 s1 → s2로 바뀐다.** 이걸 **move**라고 한다.
+- s1은 이제 주인이 아니라서 쓰면 컴파일 에러.
+- TS의 "같이 가리키기"가 Rust에선 "넘겨주기"가 된다.
 
 ```rust
 fn main() {
     let s1 = String::from("hello");
-    let s2 = s1;              // 소유권이 s1 → s2
+    let s2 = s1;              // 주인이 s1 → s2
     println!("{s1}, world!"); // ❌ s1은 더 이상 주인이 아님
     println!("{s2}");
 }
@@ -54,9 +104,38 @@ help: consider cloning the value if the performance cost is acceptable
   |                ++++++++
 ```
 
-TS의 "참조 복사"가 Rust에서는 **주인 교체**다. 힙의 `"hello"`는 그대로, 책임지는 변수만 `s2`로 바뀐다. 진짜 두 개가 필요하면 명시적으로 `s1.clone()`. ([4.1 · Move](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#variables-and-data-interacting-with-move))
+### 에러 읽는 법 (앞으로 모든 에러에 통함)
 
-## 4. 예외: `Copy` 타입은 이동하지 않는다
+| 덩어리 | 읽을 것 |
+|---|---|
+| `error[E0382]: ...` | **무엇이** 잘못됐나 |
+| `-- ... here` 표시들 | **어디서** 생겼나. 위에서 아래로 따라가면 이야기가 된다: 2번 줄에서 태어나 → 3번 줄에서 move → 4번 줄에서 또 씀 |
+| `help:` / `note:` | **어떻게** 고치나. 맨 아래쪽에 있다. 초록 `+++` = "여기에 이걸 추가하라" |
+
+> 💡 에러가 나면 **`help:`부터** 찾는 습관.
+
+진짜 두 개가 필요하면 `s1.clone()`: 힙의 `hello`까지 통째로 하나 더 만든다. 주인이 각자 하나씩이니 규칙 위반이 아니다. ([4.1 · Move](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#variables-and-data-interacting-with-move))
+
+---
+
+## 4. 예외: 숫자는 move가 아니라 복사(`Copy`)
+
+```mermaid
+flowchart LR
+  subgraph num["i32: 값이 변수 안에 다 있음"]
+    a["a = 5"]
+    b["b = 5"]
+  end
+  subgraph str["String을 베낀다면: 주소만 복사돼 주인이 둘 ⚠️ 그래서 금지"]
+    s1["s1 = 주소"] --> h["힙: hello"]
+    s2["s2 = 주소"] --> h
+  end
+  num ~~~ str
+```
+
+- `let b = a;`는 변수 안의 바이트를 그대로 베낀다.
+- **`i32`**: 베낀 바이트가 곧 값(5)이다. 둘은 완전히 독립. 치울 힙도 없다 → **그냥 복사해도 안전 → `Copy`**.
+- **`String`**: 베낀 바이트는 힙 **주소**다. 베끼면 같은 `hello`를 둘이 "내 거"라고 믿는다(그림 오른쪽) → double free 위험 → **복사 금지, move**.
 
 ```rust
 let a: i32 = 5;
@@ -64,47 +143,52 @@ let b = a;           // 복사. a도 b도 살아 있음
 println!("{a} {b}"); // 5 5
 ```
 
-스택에 통째로 올라가는 타입은 `Copy`: 모든 정수, `bool`, 모든 부동소수점, `char`, `Copy` 타입만으로 된 튜플. ([4.1 · Copy](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#stack-only-data-copy))
+**`Copy` 판단 기준:** "숫자냐 아니냐"가 아니라 **"치워야 할 무언가(힙 등)를 갖고 있냐"**.
 
-> **경험칙.** 힙을 쓰는 타입(`String`, `Vec`, 대부분의 struct)은 move. 숫자처럼 작은 것은 copy. 헷갈리면 컴파일러가 "does not implement the `Copy` trait"라고 알려준다.
+| `Copy` (복사) | move (주인 바꾸기) |
+|---|---|
+| 정수(`i32`, `u8` …), 부동소수점(`f64` …), `bool`, `char` | `String`, `Vec` |
+| `Copy`만으로 된 튜플: `(i32, bool)` | `String`이 하나라도 섞인 튜플: `(i32, String)` |
+| 필드가 전부 `Copy`이고 `#[derive(Clone, Copy)]`를 붙인 struct | `String` 필드가 있는 struct |
 
-> **Q&A (2026-10-11)**
->
-> **Q. `let a: i32`의 `i32`는 이름인가?** 아니다, 타입이다. `: i32`는 TS의 `let a: number`와 같은 타입 표기. `i32` = 부호 있는 32비트 정수. Rust는 숫자 타입이 크기·부호별로 나뉜다: `i8`~`i128`/`isize`, `u8`~`u128`/`usize`, `f32`/`f64`. 생략하면 추론되고 정수 기본값은 `i32`. ([3.2 · Data Types](https://doc.rust-lang.org/book/ch03-02-data-types.html))
->
-> **Q. `Copy` 타입이 정확히 뭔가?** "비트 그대로 복제해도 안전하다"는 표시(marker trait). `String`은 스택에 (ptr, len, cap)만 있고 글자는 힙에 있다. 이걸 복사하면 힙의 주인이 둘이 되고, GC가 없으니 둘 다 해제하면 double free. 그래서 원본을 무효화한다(move). `i32`는 해제할 자원이 없으니 복사하고 원본도 살린다(Copy). 기준은 "원시 타입이냐"가 아니라 **"해제해야 할 자원을 소유하느냐"**. `Drop`을 구현한 타입은 `Copy`가 될 수 없다. ([std::marker::Copy](https://doc.rust-lang.org/std/marker/trait.Copy.html))
->
-> **Q. "비트 그대로 복제"란, 왜 안전하지 않을 수 있나?** 변수가 차지한 스택 바이트를 의미를 따지지 않고 그대로 베끼는 것. `i32`는 바이트 안에 값(5)이 다 있으니 베껴도 독립적이다. `String`의 바이트는 힙 주소(ptr)라서 베끼면 두 변수가 같은 힙을 "내 것"으로 믿는다 → scope 끝에서 둘 다 해제(**double free**), 한쪽 해제 후 다른 쪽이 읽기(**dangling pointer**). GC가 없으니 주인은 하나여야 하고, 그래서 베낀 뒤 원본을 무효화한다(move). ([4.1 · Move, Figure 4-2/4-4](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#variables-and-data-interacting-with-move))
->
-> ```text
-> i32    a: [5]  b: [5]                         값 자체 → 독립
-> String s1: [ptr=0x100|len|cap] ─┐
->        s2: [ptr=0x100|len|cap] ─┴▶ 힙 "hello"  주인 둘 → 위험
-> ```
->
-> ```rust
-> #[derive(Clone, Copy)]
-> struct Point { x: i32, y: i32 }  // 필드가 전부 Copy → Copy 가능
->
-> struct User { name: String }     // String 보유 → Copy 불가, move
-> ```
+헷갈리면 컴파일러가 "does not implement the `Copy` trait"라고 알려준다. ([4.1 · Copy](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#stack-only-data-copy), [std::marker::Copy](https://doc.rust-lang.org/std/marker/trait.Copy.html))
 
-## 5. 함수 호출도 move다
+> 지금 100% 이해 안 돼도 괜찮다. "숫자는 복사, String은 move, 헷갈리면 컴파일러가 알려줌"이면 다음으로 넘어가도 된다. Lesson 2에서 같은 그림이 다시 나온다.
+
+---
+
+## 5. 함수에 넘기는 것도 move다
+
+```mermaid
+sequenceDiagram
+  participant main
+  participant shout
+  Note over main: name = "jintagi" (주인: main)
+  main->>shout: shout(name) → 주인이 shout로
+  shout-->>main: 대문자 String 반환
+  Note over main: name ❌ 이미 넘겨줘서 못 씀
+```
+
+- 파라미터가 `String`이면 호출하는 순간 주인이 함수로 넘어간다.
+- 함수가 끝나면 `name`은 함수 안에서 치워진다. 돌아오지 않는다.
+- 그래서 호출 뒤 `name`을 쓰면 3절과 똑같은 E0382.
 
 ```rust
 fn shout(name: String) -> String {
-    name.to_uppercase()
+    name.to_uppercase()       // 대문자로 바꾼 새 String을 반환
 }
 
 fn main() {
     let name = String::from("jintagi");
-    let loud = shout(name);   // name의 소유권이 shout으로 이동
+    let loud = shout(name);   // name의 주인이 shout로 이동
     println!("{loud}");
     println!("{name}");       // ❌ E0382: borrow of moved value: `name`
 }
 ```
 
-## 6. 퀴즈
+---
+
+## 6. 퀴즈 (머리로만 답하고 열어보기)
 
 **Q1.** `let s2 = s1;` (둘 다 `String`) 직후 상태는?
 - ⓐ s1과 s2가 같은 힙 데이터를 함께 공유한다
@@ -118,35 +202,55 @@ fn main() {
 - ⓑ `Vec<u8>`
 - ⓒ `(u8,u8)`
 
-<details><summary>정답</summary>ⓒ. Copy 타입만으로 이루어진 튜플은 Copy. String과 Vec은 힙을 소유하므로 move.</details>
+<details><summary>정답</summary>ⓒ. Copy 타입만으로 이루어진 튜플은 Copy. String과 Vec은 힙을 갖고 있으므로 move.</details>
 
 **Q3.** `fn f(s: String)`을 `f(name)`으로 호출한 뒤 `name`은?
 - ⓐ 이동됐지만 함수가 끝나면 자동으로 돌아온다
 - ⓑ 이동됐고 다시 쓰면 컴파일 에러 E0382가 난다
 - ⓒ 복사됐고 원본 변수는 그대로 남아 유효하다
 
-<details><summary>정답</summary>ⓑ. 파라미터가 소유 타입이면 호출은 move. 돌려받으려면 함수가 반환해야 한다. 다음 레슨에서 더 좋은 방법(<code>&</code>)을 배운다.</details>
-
-## 7. 과제: E0382를 두 가지 방법으로 고치기 (10분, 집에서)
-
-1. `cd ~/github/learning/rust-backend && mkdir -p exercises && cd exercises && cargo new rust-01-ownership && cd rust-01-ownership`
-2. `src/main.rs`에 5번의 `shout` 코드를 **복붙 말고 직접 타이핑**
-3. `cargo run` → E0382 확인. `value moved here`가 어디를 가리키는지 읽기
-4. **방법 A**: `shout` 시그니처는 그대로, `main`만 고쳐서 통과
-5. **방법 B**: `.clone()` 없이 `shout`가 `name`의 소유권을 **돌려주도록** 시그니처와 본문을 바꾸기 (힌트: 반환 타입이 튜플)
-6. 두 방법 모두 출력이 `JINTAGI` 다음 줄 `jintagi`
-
-<details><summary>힌트 (막혔을 때만)</summary>
-방법 A: 컴파일러가 <code>help:</code>에 이미 답을 써 줬다.<br>
-방법 B: <code>fn shout(name: String) -> (String, String)</code>. <code>to_uppercase()</code>는 새 String을 만들고 <code>name</code>은 건드리지 않으니 둘 다 돌려줄 수 있다. <code>main</code>에서 <code>let (name, loud) = shout(name);</code>.
-</details>
-
-완성한 두 버전을 `#study_rust`에 올리면 리뷰. **방법 B가 왜 불편한지 한 줄**도 같이 — 그게 Lesson 2(borrowing, `&`)의 출발점.
+<details><summary>정답</summary>ⓑ. 파라미터가 <code>String</code>이면 호출은 move. 돌려받으려면 함수가 반환해야 한다. 더 좋은 방법(<code>&</code>)은 Lesson 2에서.</details>
 
 ---
 
-**이번 레슨의 승리:** E0382를 보고 "아, 여기서 move됐구나"라고 읽을 수 있게 됐다.
+## 7. 과제: E0382를 두 가지 방법으로 고치기 (10분)
 
-**더 읽기:** [The Rust Book · 4.1 What Is Ownership?](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html) (15분). 치트시트: [reference/ownership.md](../reference/ownership.md)
+**준비** (터미널 아무 위치에서 그대로 붙여넣기)
 
-다음: Lesson 2 · Borrowing (`&`) — 소유권을 넘기지 않고 빌려 쓰기. 질문은 `@Ferris`.
+```sh
+cd ~/github/learning/rust-backend && mkdir -p exercises && cd exercises && cargo new rust-01-ownership && cd rust-01-ownership
+```
+
+`cargo new`는 TS의 `npm init`처럼 프로젝트 폴더를 만든다. 코드는 `src/main.rs`, 실행은 이 폴더에서 `cargo run`.
+
+**할 일**
+
+1. `src/main.rs`에 5절의 `shout` 코드를 **복붙 말고 직접 타이핑**
+2. `cargo run` → E0382 확인. `value moved here`가 몇 번 줄을 가리키는지 읽기
+3. **방법 A**: `shout`는 그대로 두고 `main`만 고쳐서 통과 → 에러의 `help:` 줄을 읽으면 답이 있다
+4. **방법 B**: `.clone()` 없이, `shout`가 `name`을 **다시 돌려주도록** 바꾸기
+5. 두 방법 모두 출력이 아래와 같으면 성공
+   ```
+   JINTAGI
+   jintagi
+   ```
+
+> ⚠️ 에러에 `note: consider changing this parameter type ... to borrow` 도 나오는데, 그건 Lesson 2의 방법(`&`)이다. 이번엔 A·B로 풀어서 **불편함을 손으로 느껴보는 게** 목적.
+
+<details><summary>방법 B 힌트 (막혔을 때만)</summary>
+반환 타입을 튜플로: <code>fn shout(name: String) -> (String, String)</code>.<br>
+함수 안에서 <code>let loud = name.to_uppercase();</code> 다음 <code>(name, loud)</code>를 반환.<br>
+<code>main</code>에서 <code>let (name, loud) = shout(name);</code> 로 둘 다 받기.
+</details>
+
+다 되면 두 버전을 `#study_rust`에 올리기 + **"방법 B가 왜 불편한지" 한 줄**. 그게 Lesson 2의 출발점.
+
+---
+
+**🏆 이번 레슨의 승리:** E0382를 보고 "아, 여기서 주인이 넘어갔구나"라고 읽을 수 있다.
+
+**📖 더 읽기:** [The Rust Book · 4.1 What Is Ownership?](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html) (15분) · 치트시트 [reference/ownership.md](../reference/ownership.md)
+
+**❓ 막히면** `#study_rust`에서 `@Ferris`. 어떤 질문이든 좋아요.
+
+다음: [Lesson 2 · Borrowing (`&`)](./0002-borrowing.md)

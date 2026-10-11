@@ -54,4 +54,15 @@
 | `E0499` | `&mut` 두 개가 동시에 살아 있음 | 첫 대여의 마지막 사용을 앞으로 |
 | `E0502` | `&`가 살아 있는데 `&mut` | `later used here` 줄을 `&mut` 위로 |
 
-레슨: [Lesson 1](../lessons/0001-ownership-move.md) · [Lesson 2](../lessons/0002-borrowing.md)
+## Slice와 `&str` ([4.3](https://doc.rust-lang.org/book/ch04-03-slices.html))
+
+| 코드 | 뜻 |
+|---|---|
+| `&s[0..5]` / `&s[7..]` | s의 일부(바이트 범위)를 **복사 없이** 빌림. 타입 `&str` |
+| `"hi"` | 리터럴. 타입 `&str` |
+| `fn f(s: &str)` | 읽기 전용 문자열 파라미터의 관례. `&String`도 자동 변환돼 들어옴 |
+| `String` vs `&str` | 내 거(주인, 수정 가능) vs 빌려 본 것 |
+
+⚠️ 범위·`len()`은 **바이트** 단위. 한글 1글자 = 3바이트. 글자 중간을 자르면 실행 중 panic(`is not a char boundary`).
+
+레슨: [Lesson 1](../lessons/0001-ownership-move.md) · [Lesson 2](../lessons/0002-borrowing.md) · [Lesson 3](../lessons/0003-slices-str.md)

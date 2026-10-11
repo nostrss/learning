@@ -9,6 +9,7 @@ TS 프론트엔드 개발자가 Rust 백엔드 개발자가 되기 위한 학습
 |---|------|---------|
 | 1 | [Ownership: 값의 주인은 한 명](lessons/0001-ownership-move.md) | [ownership](reference/ownership.md) |
 | 2 | [Borrowing: 넘기지 말고 빌려주기](lessons/0002-borrowing.md) | [ownership#borrowing](reference/ownership.md#borrowing) |
+| 3 | [Slice와 `&str`: 문자열의 일부를 빌리기](lessons/0003-slices-str.md) | [ownership](reference/ownership.md) |
 
 ## 구조
 

@@ -266,4 +266,4 @@ cd ~/github/learning/rust-backend && mkdir -p exercises && cd exercises && cargo
 
 **❓ 막히면** `#study_rust`에서 `@Ferris`.
 
-이전: [Lesson 1 · Ownership](./0001-ownership-move.md) · 다음: Lesson 3 · Slices와 `&str`
+이전: [Lesson 1 · Ownership](./0001-ownership-move.md) · 다음: [Lesson 3 · Slice와 `&str`](./0003-slices-str.md)

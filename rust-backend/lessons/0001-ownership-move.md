@@ -74,6 +74,14 @@ println!("{a} {b}"); // 5 5
 >
 > **Q. `Copy` 타입이 정확히 뭔가?** "비트 그대로 복제해도 안전하다"는 표시(marker trait). `String`은 스택에 (ptr, len, cap)만 있고 글자는 힙에 있다. 이걸 복사하면 힙의 주인이 둘이 되고, GC가 없으니 둘 다 해제하면 double free. 그래서 원본을 무효화한다(move). `i32`는 해제할 자원이 없으니 복사하고 원본도 살린다(Copy). 기준은 "원시 타입이냐"가 아니라 **"해제해야 할 자원을 소유하느냐"**. `Drop`을 구현한 타입은 `Copy`가 될 수 없다. ([std::marker::Copy](https://doc.rust-lang.org/std/marker/trait.Copy.html))
 >
+> **Q. "비트 그대로 복제"란, 왜 안전하지 않을 수 있나?** 변수가 차지한 스택 바이트를 의미를 따지지 않고 그대로 베끼는 것. `i32`는 바이트 안에 값(5)이 다 있으니 베껴도 독립적이다. `String`의 바이트는 힙 주소(ptr)라서 베끼면 두 변수가 같은 힙을 "내 것"으로 믿는다 → scope 끝에서 둘 다 해제(**double free**), 한쪽 해제 후 다른 쪽이 읽기(**dangling pointer**). GC가 없으니 주인은 하나여야 하고, 그래서 베낀 뒤 원본을 무효화한다(move). ([4.1 · Move, Figure 4-2/4-4](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#variables-and-data-interacting-with-move))
+>
+> ```text
+> i32    a: [5]  b: [5]                         값 자체 → 독립
+> String s1: [ptr=0x100|len|cap] ─┐
+>        s2: [ptr=0x100|len|cap] ─┴▶ 힙 "hello"  주인 둘 → 위험
+> ```
+>
 > ```rust
 > #[derive(Clone, Copy)]
 > struct Point { x: i32, y: i32 }  // 필드가 전부 Copy → Copy 가능

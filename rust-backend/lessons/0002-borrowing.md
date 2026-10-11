@@ -85,17 +85,52 @@ fn main() {
 > 어느 시점이든 **`&`는 여러 개** 또는 **`&mut`는 딱 하나**. 둘을 동시에 가질 수는 없다.
 > ([4.2 · Mutable References](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#mutable-references))
 
-읽는 사람이 여럿이면 괜찮다. 누가 쓰는 중에 다른 누가 읽거나 쓰면 안 된다. 멀티스레드의 **data race**를 컴파일 타임에 막는 규칙이다.
+| 이미 살아 있는 것 | 새로 `&s` | 새로 `&mut s` |
+|---|---|---|
+| 없음 | ✅ | ✅ |
+| `&s` (몇 개든) | ✅ | ❌ E0502 |
+| `&mut s` | ❌ E0502 | ❌ E0499 |
+
+공유 문서 비유: `&`는 **보기 권한**, `&mut`는 **편집 권한**. 보는 사람은 몇 명이든 괜찮지만, 누가 편집하는 동안엔 아무도 보거나 편집하면 안 된다.
+
+### 4-1. 왜 이런 규칙이? 스레드 하나에서도 터지는 버그
+
+```rust
+let mut v = vec![1, 2, 3];
+let first = &v[0];     // v의 첫 칸을 가리키는 읽기 참조
+v.push(4);             // ❌ E0502
+println!("{first}");
+```
+
+`Vec`은 칸이 모자라면 `push` 때 **더 큰 힙 공간을 새로 잡고 데이터를 옮긴 뒤 옛 공간을 해제**한다. 그러면 `first`는 이미 반납된 옛 공간을 가리킨다 → Lesson 1에서 본 **dangling pointer**. Rust는 "읽는 중에는 못 고친다" 규칙 하나로 이걸 컴파일 타임에 막는다. ([Book 8.1 · Reading Elements of Vectors](https://doc.rust-lang.org/book/ch08-01-vectors.html#reading-elements-of-vectors))
+
+> **TS에서 본 적 있는 버그.** 배열을 `for...of`로 돌면서 그 배열에 `push`/`splice`하면 순회가 꼬인다. JS는 실행해 봐야 알지만, Rust는 컴파일 단계에서 거절한다. 여러 스레드가 동시에 읽고 쓰는 **data race**도 같은 규칙으로 막힌다.
+
+참고: `v.push(4)`처럼 메서드를 부르면 Rust가 `&mut v`를 **자동으로** 만든다. 코드에 `&mut`가 안 보여도 쓰기 대여가 일어난 것.
+
+### 4-2. "살아 있다"의 범위: 만든 줄부터 마지막으로 쓴 줄까지
+
+```text
+let r1 = &s;          ─┐ r1 살아 있음
+let r2 = &mut s;       │ ❌ 이 구간 안에서 &mut
+r2.push_str("!");      │
+println!("{r1}");     ─┘ r1 마지막 사용
+```
+
+`{ }` 블록 끝이 아니라 **마지막 사용**이 기준이다(Book이 말하는 "scope of a reference"). 그래서 줄 순서만 바꿔도 통과한다:
 
 ```rust
 let mut s = String::from("hello");
-let r1 = &s;          // 읽기 대여
-let r2 = &mut s;      // ❌ 읽기 대여가 아직 살아 있는데 쓰기 대여
+let r1 = &s;
+println!("{r1}");     // r1 여기서 끝
+let r2 = &mut s;      // ✅ 살아 있는 읽기 대여 없음
 r2.push_str("!");
-println!("{r1}");     // r1을 여기서 또 쓰니까 "살아 있음"
+println!("{s}");      // hello!
 ```
 
-rustc 1.95.0 실제 출력:
+### 4-3. E0502 읽는 법
+
+rustc 1.95.0 실제 출력 (4-2의 ❌ 코드):
 
 ```
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
@@ -110,7 +145,11 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
   |                -- immutable borrow later used here
 ```
 
-**대여는 마지막으로 쓰인 줄에서 끝난다.** `println!("{r1}")`을 `&mut` 위로 올리면 `r1`의 대여가 먼저 끝나므로 통과한다. 에러 메시지의 세 줄(`occurs here` / `occurs here` / `later used here`)이 정확히 이 구간을 보여준다.
+1. `immutable borrow occurs here` → 읽기 대여가 **시작**된 곳
+2. `later used here` → 그 대여가 **끝나는** 곳(마지막 사용)
+3. `mutable borrow occurs here` → 그 구간 **안에** 끼어든 쓰기
+
+고치는 길은 셋 중 하나: **(a)** 마지막 사용을 쓰기 위로 옮긴다 · **(b)** 참조 대신 값을 꺼낸다(`let first = v[0];`는 `i32` Copy라 대여가 아님) · **(c)** 정말 둘 다 필요하면 `.clone()`.
 
 ## 5. 퀴즈
 

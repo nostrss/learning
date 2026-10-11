@@ -122,6 +122,8 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
 <details><summary>정답</summary>ⓑ. <code>&</code>는 빌려줄 뿐 소유권을 옮기지 않는다. 참조는 주인이 아니라 해제도 하지 않는다.</details>
 
 **Q2.** 동시에 살아 있어도 컴파일되는 조합은?
+
+> "살아 있다" = 참조를 만든 뒤 아래에서 또 쓸 예정인 상태. 즉 `let r1 = ...; let r2 = ...; println!("{r1} {r2}");` 꼴에서 r1, r2 자리에 무엇을 넣으면 통과하나?
 - ⓐ `&s` 두 개
 - ⓑ `&mut s` 두 개
 - ⓒ `&s`와 `&mut s`

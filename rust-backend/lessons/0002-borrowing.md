@@ -22,7 +22,20 @@ fn shout(name: String) -> (String, String) { ... }
 let (name, loud) = shout(name);   // 받았다가 다시 돌려받기
 ```
 
-함수에 값을 **보여주기만** 하고 싶은데, 주인까지 넘겼다가 돌려받는 셈이다. Book 4.2도 정확히 이 튜플 반환 코드에서 출발한다. ([4.2 · References and Borrowing](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html))
+함수에 값을 **보여주기만** 하고 싶은데, 주인까지 넘겼다가 돌려받는 셈이다. Book 4.2도 정확히 이 튜플 반환 코드에서 출발한다.
+
+> **Q&A (2026-10-11) · "넘겼다가 돌려받는다"는 게 무슨 뜻?** 주인을 줄마다 따라가면:
+>
+> ```rust
+> fn shout(name: String) -> (String, String) {
+>     let loud = name.to_uppercase();     // ③ 대문자 새 String
+>     (name, loud)                        // ④ name을 일부러 다시 반환
+> }
+> let name = String::from("jintagi");     // ① 주인: main
+> let (name, loud) = shout(name);         // ② 주인: shout → ⑤ 돌려받아 다시 main
+> ```
+>
+> shout는 name을 **읽기만** 하는데, `String`으로 받으니 ②에서 소유권이 넘어가고 ④⑤로 되돌려야 한다. 책을 읽게 해 주려고 **선물로 줬다가 다시 선물받는** 꼴. `&`는 그냥 **빌려주기**라 ②④⑤가 사라진다. ([4.2 · References and Borrowing](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html))
 
 ## 2. `&`: 주인은 그대로, 보기만 빌려준다
 

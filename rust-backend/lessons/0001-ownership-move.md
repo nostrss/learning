@@ -68,6 +68,19 @@ println!("{a} {b}"); // 5 5
 
 > **경험칙.** 힙을 쓰는 타입(`String`, `Vec`, 대부분의 struct)은 move. 숫자처럼 작은 것은 copy. 헷갈리면 컴파일러가 "does not implement the `Copy` trait"라고 알려준다.
 
+> **Q&A (2026-10-11)**
+>
+> **Q. `let a: i32`의 `i32`는 이름인가?** 아니다, 타입이다. `: i32`는 TS의 `let a: number`와 같은 타입 표기. `i32` = 부호 있는 32비트 정수. Rust는 숫자 타입이 크기·부호별로 나뉜다: `i8`~`i128`/`isize`, `u8`~`u128`/`usize`, `f32`/`f64`. 생략하면 추론되고 정수 기본값은 `i32`. ([3.2 · Data Types](https://doc.rust-lang.org/book/ch03-02-data-types.html))
+>
+> **Q. `Copy` 타입이 정확히 뭔가?** "비트 그대로 복제해도 안전하다"는 표시(marker trait). `String`은 스택에 (ptr, len, cap)만 있고 글자는 힙에 있다. 이걸 복사하면 힙의 주인이 둘이 되고, GC가 없으니 둘 다 해제하면 double free. 그래서 원본을 무효화한다(move). `i32`는 해제할 자원이 없으니 복사하고 원본도 살린다(Copy). 기준은 "원시 타입이냐"가 아니라 **"해제해야 할 자원을 소유하느냐"**. `Drop`을 구현한 타입은 `Copy`가 될 수 없다. ([std::marker::Copy](https://doc.rust-lang.org/std/marker/trait.Copy.html))
+>
+> ```rust
+> #[derive(Clone, Copy)]
+> struct Point { x: i32, y: i32 }  // 필드가 전부 Copy → Copy 가능
+>
+> struct User { name: String }     // String 보유 → Copy 불가, move
+> ```
+
 ## 5. 함수 호출도 move다
 
 ```rust
